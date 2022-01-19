@@ -1,0 +1,71 @@
+﻿<UserControl x:Class="HoPoSim.Presentation.Controls.EntityComboTextBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HoPoSim.Presentation.Controls"
+             xmlns:converters="clr-namespace:HoPoSim.Presentation.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/HoPoSim.Presentation;component/Styles/Generic.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+			<converters:NegateBooleanToVisibilityConverter x:Key="NegateBooleanToVisibilityConverter"/>
+			<converters:EntityInCollectionToBooleanConverter x:Key="EntityInCollectionToBooleanConverter"/>
+			<Style x:Key="ComboBoxStyle" TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+				<Setter Property="Visibility" Value="Visible"/>
+				<Style.Triggers>
+					<DataTrigger Value="false">
+						<DataTrigger.Binding>
+							<MultiBinding Mode="OneWay" Converter="{StaticResource EntityInCollectionToBooleanConverter}">
+								<Binding Path="TargetEntity" RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}" Mode="OneWay"/>
+								<Binding Path="ComboBoxItemsSource" RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}" Mode="OneWay"/>
+							</MultiBinding>
+						</DataTrigger.Binding>
+						<Setter Property="Visibility" Value="Collapsed"/>
+					</DataTrigger>
+				</Style.Triggers>
+			</Style>
+			<Style x:Key="TextBoxStyle" TargetType="TextBox"  BasedOn="{StaticResource {x:Type TextBox}}">
+				<Setter Property="Visibility" Value="Collapsed"/>
+				<Style.Triggers>
+					<DataTrigger Value="false">
+						<DataTrigger.Binding>
+							<MultiBinding Mode="OneWay" Converter="{StaticResource EntityInCollectionToBooleanConverter}">
+								<Binding Path="TargetEntity" RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}" Mode="OneWay"/>
+								<Binding Path="ComboBoxItemsSource" RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}" Mode="OneWay"/>
+							</MultiBinding>
+						</DataTrigger.Binding>
+						<Setter Property="Visibility" Value="Visible"/>
+					</DataTrigger>
+				</Style.Triggers>
+			</Style>
+		</ResourceDictionary>
+
+	</UserControl.Resources>
+
+	<UserControl.Template>
+		<ControlTemplate>
+			<StackPanel>
+				<TextBox IsReadOnly="True" BorderThickness="0" HorizontalAlignment="Left" Width="300" Style="{StaticResource TextBoxStyle}"
+                         Text="{Binding TextBoxDisplayName, RelativeSource ={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}}"/>
+
+
+				<ComboBox HorizontalAlignment="Left" MinWidth="150" Style="{StaticResource ComboBoxStyle}"
+                                      ItemsSource="{Binding ComboBoxItemsSource, RelativeSource ={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}}"
+                                      SelectedValue="{Binding ComboBoxSelectedValue, RelativeSource ={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}}"
+                                      IsTextSearchEnabled="True"
+                                      IsEditable="True"
+                                      DisplayMemberPath="{Binding DisplayMemberPath, RelativeSource ={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}}"
+                                      
+                                      SelectedValuePath="Id"
+                                      ItemTemplate="{Binding ComboBoxItemTemplate, RelativeSource ={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}}">
+				</ComboBox>
+			</StackPanel>
+		</ControlTemplate>
+	</UserControl.Template>
+</UserControl>
+
