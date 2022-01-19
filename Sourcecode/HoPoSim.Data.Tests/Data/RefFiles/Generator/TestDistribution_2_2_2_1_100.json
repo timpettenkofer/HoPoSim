@@ -1,0 +1,184 @@
+{
+  "RangeId": -1,
+  "Total": 100,
+  "Percent": 100.0,
+  "Absolute": 100,
+  "Children": [
+    {
+      "RangeId": 1,
+      "Total": 100,
+      "Percent": 60.0,
+      "Absolute": 60,
+      "Children": [
+        {
+          "RangeId": 1,
+          "Total": 60,
+          "Percent": 80.0,
+          "Absolute": 48,
+          "Children": [
+            {
+              "RangeId": 1,
+              "Total": 48,
+              "Percent": 50.0,
+              "Absolute": 24,
+              "Children": [
+            {
+              "RangeId": 1,
+              "Total": 24,
+              "Percent": 100.0,
+              "Absolute": 24,
+              "Children": [],
+              "Id": 0
+            }
+          ]
+            },
+            {
+              "RangeId": 2,
+              "Total": 48,
+              "Percent": 50.0,
+              "Absolute": 24,
+              "Children": [
+            {
+              "RangeId": 1,
+              "Total": 24,
+              "Percent": 100.0,
+              "Absolute": 24,
+              "Children": [],
+              "Id": 0
+            }
+          ]
+            }
+          ]
+        },
+        {
+          "RangeId": 2,
+          "Total": 60,
+          "Percent": 20.0,
+          "Absolute": 12,
+          "Children": [
+            {
+              "RangeId": 1,
+              "Total": 12,
+              "Percent": 25.0,
+              "Absolute": 3,
+              "Children": [
+            {
+              "RangeId": 1,
+              "Total": 3,
+              "Percent": 100.0,
+              "Absolute": 3,
+              "Children": [],
+              "Id": 0
+            }
+          ]
+            },
+            {
+              "RangeId": 2,
+              "Total": 12,
+              "Percent": 75.0,
+              "Absolute": 9,
+              "Children": [
+            {
+              "RangeId": 1,
+              "Total": 9,
+              "Percent": 100.0,
+              "Absolute": 9,
+              "Children": [],
+              "Id": 0
+            }
+          ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "RangeId": 2,
+      "Total": 100,
+      "Percent": 40.0,
+      "Absolute": 40,
+      "Children": [
+        {
+          "RangeId": 1,
+          "Total": 40,
+          "Percent": 60.0,
+          "Absolute": 24,
+          "Children": [
+            {
+              "RangeId": 1,
+              "Total": 24,
+              "Percent": 50.0,
+              "Absolute": 12,
+              "Children": [
+            {
+              "RangeId": 1,
+              "Total": 12,
+              "Percent": 100.0,
+              "Absolute": 12,
+              "Children": [],
+              "Id": 0
+            }
+          ]
+            },
+            {
+              "RangeId": 2,
+              "Total": 24,
+              "Percent": 50.0,
+              "Absolute": 12,
+              "Children": [
+            {
+              "RangeId": 1,
+              "Total": 12,
+              "Percent": 100.0,
+              "Absolute": 12,
+              "Children": [],
+              "Id": 0
+            }
+          ]
+            }
+          ]
+        },
+        {
+          "RangeId": 2,
+          "Total": 40,
+          "Percent": 40.0,
+          "Absolute": 16,
+          "Children": [
+            {
+              "RangeId": 1,
+              "Total": 16,
+              "Percent": 75.0,
+              "Absolute": 12,
+              "Children": [
+            {
+              "RangeId": 1,
+              "Total": 12,
+              "Percent": 100.0,
+              "Absolute": 12,
+              "Children": [],
+              "Id": 0
+            }
+          ]
+            },
+            {
+              "RangeId": 2,
+              "Total": 16,
+              "Percent": 25.0,
+              "Absolute": 4,
+              "Children": [
+            {
+              "RangeId": 1,
+              "Total": 4,
+              "Percent": 100.0,
+              "Absolute": 4,
+              "Children": [],
+              "Id": 0
+            }
+          ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
