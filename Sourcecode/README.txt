@@ -1,4 +1,4 @@
-HOW TO INSTALL:
+HOW TO INSTALL (für die kompilierte Version):
 
 - Die setup.exe Datei herunterladen und ausführen.
 - Wenn gefragt, Rechte geben, um die Installation des Programms bis zum Ende auszuführen
