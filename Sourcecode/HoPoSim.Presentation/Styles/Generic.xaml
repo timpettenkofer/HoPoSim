@@ -1,0 +1,766 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:HoPoSim.Presentation.Converters"
+                    xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                     xmlns:controls="clr-namespace:HoPoSim.Presentation.Controls"
+                     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                    xmlns:filter="clr-namespace:HoPoSim.Presentation.Filter"
+                    xmlns:templates="clr-namespace:HoPoSim.Presentation.Templates"
+                    xmlns:extensions="clr-namespace:HoPoSim.Presentation.Extensions"
+                    xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=System">
+
+	<converters:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter"/>
+	<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+	<converters:InvertBoolConverter x:Key="InvertBoolConverter"/>
+	<converters:CollectionToVisibilityConverter x:Key="CollectionToVisibilityConverter"/>
+	<converters:FilterToIsExpandedConverter x:Key="FilterToIsExpandedConverter"/>
+	<converters:ListSortDirectionToBooleanConverter x:Key="ListSortDirectionToBooleanConverter"/>
+	<converters:ValueConverterGroup x:Key="NegatedBooleanToVisibility">
+		<converters:InvertBoolConverter/>
+		<BooleanToVisibilityConverter/>
+	</converters:ValueConverterGroup>
+
+	<Style x:Key="SummaryTitle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+		<Setter Property="FontSize" Value="21"/>
+		<Setter Property="Margin" Value="10,0,10,10"/>
+	</Style>
+
+	<Style x:Key="SummaryEntry" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+		<Setter Property="FontSize" Value="12"/>
+		<Setter Property="Margin" Value="10,0,10,10"/>
+	</Style>
+
+	<Style x:Key="RightTextBlock" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="Margin" Value="0,5,10,10"/>
+	</Style>
+
+	<Style x:Key="LeftTextBlock" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="Margin" Value="0,5,20,10"/>
+	</Style>
+
+	<!--<Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+		<Setter Property="Controls:TextBoxHelper.SelectAllOnFocus" Value="True"/>
+	</Style>-->
+
+	<Style x:Key="NameTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+		<Setter Property="Width" Value="250"/>
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+	</Style>
+
+	<Style x:Key="DataGridComboBoxColumnElementStyle" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+		<Setter Property="IsEditable" Value="True"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="MinWidth" Value="200"/>
+		<Setter Property="Margin" Value="0"/>
+	</Style>
+
+	<Style x:Key="DataGridComboBoxColumnEditingElementStyle" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+		<Setter Property="IsEditable" Value="True"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="0"/>
+	</Style>
+
+	
+
+	<Style x:Key="CustomMetroDataGridColumnHeader" TargetType="{x:Type DataGridColumnHeader}">
+		<Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource GrayBrush5}" />
+		<Setter Property="BorderThickness" Value="0 0 0 3" />
+		<Setter Property="Controls:ControlsHelper.ContentCharacterCasing" Value="Normal" />
+		<Setter Property="Cursor" Value="Hand" />
+		<Setter Property="FontWeight" Value="SemiBold" />
+		<Setter Property="Foreground" Value="{DynamicResource BlackBrush}" />
+		<Setter Property="HorizontalContentAlignment" Value="Left" />
+		<Setter Property="Margin" Value="0" />
+		<Setter Property="MinHeight" Value="25" />
+		<Setter Property="MinWidth" Value="0" />
+		<Setter Property="Padding" Value="10 4 4 7" />
+		<Setter Property="SnapsToDevicePixels" Value="True" />
+		
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*" />
+							<ColumnDefinition Width="Auto" />
+						</Grid.ColumnDefinitions>
+						<Border x:Name="BackgroundBorder"
+                                Grid.ColumnSpan="2"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}" />
+
+						<Controls:ContentControlEx x:Name="HeaderContent"
+                                                   Padding="{TemplateBinding Padding}"
+                                                   HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                   VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                   Content="{TemplateBinding Content}"
+                                                   ContentCharacterCasing="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(Controls:ControlsHelper.ContentCharacterCasing)}"
+                                                   ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                                   ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                   ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
+                                                   RecognizesAccessKey="True"
+												   Height="40"
+                                                   SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+							<Controls:ContentControlEx.LayoutTransform>
+								<RotateTransform Angle="270" />
+							</Controls:ContentControlEx.LayoutTransform>
+						</Controls:ContentControlEx>
+
+						<Path x:Name="SortArrow"
+                              Grid.Column="1"
+                              Width="8"
+                              Height="10"
+                              Margin="0 0 8 2"
+                              VerticalAlignment="Center"
+                              Fill="{DynamicResource GrayBrush2}"
+                              RenderTransformOrigin="0.5,0.5"
+                              Stretch="Fill"
+                              Visibility="Collapsed" />
+
+						<Thumb x:Name="PART_LeftHeaderGripper"
+                               HorizontalAlignment="Left"
+                               Background="Transparent"
+                               Style="{StaticResource MetroColumnHeaderGripperStyle}" />
+
+						<Thumb x:Name="PART_RightHeaderGripper"
+                               Grid.Column="1"
+                               HorizontalAlignment="Right"
+                               Style="{StaticResource MetroColumnHeaderGripperStyle}" />
+					</Grid>
+					<ControlTemplate.Triggers>
+						<Trigger Property="SortDirection" Value="Ascending">
+							<Setter TargetName="SortArrow" Property="Data" Value="F1 M 34,57L 42,57L 42,32.25L 52,42.25L 52,31.75L 38,17.75L 24,31.75L 24,42.25L 34,32.25L 34,57 Z " />
+							<Setter TargetName="SortArrow" Property="Visibility" Value="Visible" />
+						</Trigger>
+						<Trigger Property="SortDirection" Value="Descending">
+							<Setter TargetName="SortArrow" Property="Data" Value="F1 M 42,19.0002L 34,19.0002L 34,43.7502L 24,33.7502L 24,44.2502L 38,58.2502L 52,44.2502L 52,33.7502L 42,43.7502L 42,19.0002 Z " />
+							<Setter TargetName="SortArrow" Property="Margin" Value="0 0 8 0" />
+							<Setter TargetName="SortArrow" Property="Visibility" Value="Visible" />
+						</Trigger>
+						<Trigger Property="DisplayIndex" Value="0">
+							<Setter TargetName="PART_LeftHeaderGripper" Property="Visibility" Value="Collapsed" />
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="VerticalContentAlignment" Value="Center" />
+		<Style.Triggers>
+			<MultiTrigger>
+				<MultiTrigger.Conditions>
+					<Condition Property="IsMouseOver" Value="True" />
+					<Condition Property="SortDirection" Value="{x:Null}" />
+				</MultiTrigger.Conditions>
+				<Setter Property="Background" Value="{DynamicResource GrayBrush8}" />
+			</MultiTrigger>
+			<Trigger Property="IsEnabled" Value="False">
+				<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+			</Trigger>
+		</Style.Triggers>
+	</Style>
+
+
+	<Style TargetType="{x:Type controls:EntityCommandControl}">
+		<Setter Property="FontSize" Value="14" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type controls:EntityCommandControl}">
+					<Button x:Name="PART_EntityCommandButton" Command="{TemplateBinding Command}" CommandParameter="{TemplateBinding CommandParameter}" Background="Transparent" BorderThickness="0" HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" Margin="0" 
+                                    ToolTip="{TemplateBinding Tooltip}">
+						<StackPanel Orientation="Horizontal">
+							<iconPacks:PackIconMaterial Width="22" Height="22" Kind="{TemplateBinding IconMaterialKind}" Margin="10,0,0,0"/>
+							<TextBlock Text="{TemplateBinding Text}" FontSize="{TemplateBinding FontSize}" Margin="10,0,0,0" />
+						</StackPanel>
+						<!--<Button.Style>
+                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsEnabled, ElementName=PART_EntityCommandButton}" Value="false">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>-->
+					</Button>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key="DatePickerStyle" TargetType="{x:Type DatePicker}" BasedOn="{StaticResource {x:Type DatePicker}}">
+		<Setter Property="HorizontalContentAlignment" Value="Left"/>
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="Margin" Value="0,0,0,15"/>
+		<Setter Property="TextBlock.MinWidth" Value="150"/>
+	</Style>
+
+	<Style x:Key="TimePickerStyle" TargetType="{x:Type Controls:TimePicker}" BasedOn="{StaticResource {x:Type Controls:TimePicker}}">
+		<Setter Property="HorizontalContentAlignment" Value="Left"/>
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="Margin" Value="0,0,0,15"/>
+		<Setter Property="TextBlock.MinWidth" Value="150"/>
+		<Setter Property="Culture" Value="{Binding CustomCulture}"/>
+	</Style>
+
+	<Style TargetType="{x:Type controls:ListBoxEntityBrowser}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type controls:ListBoxEntityBrowser}">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="*"/>
+						</Grid.RowDefinitions>
+						<!--<ListBox
+                            ToolTip="zuletzt bearbeitete Eintrage"
+                            ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                            ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                            HorizontalContentAlignment="Stretch"
+                            Height="Auto"
+                            Margin="0,5,0,0"
+                            BorderThickness="2,2,2,2"
+                            BorderBrush="{DynamicResource AccentColorBrush}"
+                            VerticalAlignment="Top" 
+                            ItemsSource="{Binding RecentEntities}"
+                            Visibility="{Binding RecentEntities, Converter={StaticResource CollectionToVisibilityConverter}}"
+                            ItemTemplate="{TemplateBinding BrowserItemTemplate}"
+                            IsSynchronizedWithCurrentItem="True" 
+                            SelectedValue="{Binding SelectedItem}"/>-->
+
+						<ListBox Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Stretch"
+                            x:Name="EntityListBox" 
+							ToolTip="Alle Eintrage"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                            HorizontalContentAlignment="Stretch"
+                            Margin="0,5,0,0"
+                            BorderThickness="2,2,2,2"
+                            BorderBrush="{DynamicResource AccentColorBrush}"
+                            ItemsSource="{Binding EntitiesView}"
+                            Visibility="{Binding EntitiesView.SourceCollection, Converter={StaticResource CollectionToVisibilityConverter}}"
+                            ItemTemplate="{TemplateBinding BrowserItemTemplate}"
+                            IsSynchronizedWithCurrentItem="True" 
+                            SelectedItem="{Binding SelectedItem}"/>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<DataTemplate x:Key="DateDataTemplate">
+		<Expander Header="{Binding DisplayName}" Style="{StaticResource FilterCriteriumExpander}">
+			<!--<Expander.IsExpanded>
+                <MultiBinding Mode="TwoWay" Converter="{StaticResource FilterToIsExpandedConverter}">
+                    <Binding Path="SelectedValue" Mode="OneWay"/>
+                    <Binding Path="DefaultValue" Mode="OneWay"/>
+                    <Binding Path="." Mode="OneWay"/>
+                </MultiBinding>
+            </Expander.IsExpanded>-->
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="50"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition/>
+					<RowDefinition/>
+				</Grid.RowDefinitions>
+				<TextBlock Margin="5" Text="von"/>
+				<DatePicker Grid.Column="1" Margin="5" Style="{StaticResource DatePickerStyle}" SelectedDate="{Binding From, Mode=TwoWay}"/>
+				<Button Grid.Column="2" Command="{Binding ResetFromFilter}" ToolTip="Filter zurücksetzen" BorderThickness="0" Background="Transparent">
+					<iconPacks:PackIconMaterial Kind="Close"/>
+				</Button>
+
+				<TextBlock Margin="5" Text="bis" Grid.Row="1"/>
+				<DatePicker Grid.Column="1" Margin="5" Grid.Row="1" Style="{StaticResource DatePickerStyle}" SelectedDate="{Binding To, Mode=TwoWay}"/>
+				<Button Grid.Column="2" Grid.Row="1" Command="{Binding ResetToFilter}" ToolTip="Filter zurücksetzen" BorderThickness="0" Background="Transparent">
+					<iconPacks:PackIconMaterial Kind="Close"/>
+				</Button>
+			</Grid>
+		</Expander>
+	</DataTemplate>
+
+	<DataTemplate x:Key="NumberDataTemplate">
+		<Expander Header="{Binding DisplayName}" Style="{StaticResource FilterCriteriumExpander}">
+			<!--<Expander.IsExpanded>
+                <MultiBinding Mode="TwoWay" Converter="{StaticResource FilterToIsExpandedConverter}">
+                    <Binding Path="SelectedValue" Mode="OneWay"/>
+                    <Binding Path="DefaultValue" Mode="OneWay"/>
+                    <Binding Path="." Mode="OneWay"/>
+                </MultiBinding>
+            </Expander.IsExpanded>-->
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="50"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition/>
+					<RowDefinition/>
+				</Grid.RowDefinitions>
+				<TextBlock Margin="5" Text="von"/>
+				<Controls:NumericUpDown  Grid.Column="1" Margin="5" Interval=".1" Minimum="0" Maximum="10000" Value="{Binding From, Mode=TwoWay, UpdateSourceTrigger=Default}" HasDecimals="True" Culture="de-DE" StringFormat="F1"/>
+				<Button Grid.Column="2" Command="{Binding ResetFromFilter}" ToolTip="Filter zurücksetzen" BorderThickness="0" Background="Transparent">
+					<iconPacks:PackIconMaterial Kind="Close"/>
+				</Button>
+
+				<TextBlock Margin="5" Text="bis" Grid.Row="1"/>
+				<Controls:NumericUpDown  Grid.Column="1" Grid.Row="1" Margin="5" Interval=".1" Minimum="0" Maximum="10000" Value="{Binding To, Mode=TwoWay, UpdateSourceTrigger=Default}" HasDecimals="True" Culture="de-DE" StringFormat="F1"/>
+				<Button Grid.Column="2" Grid.Row="1" Command="{Binding ResetToFilter}" ToolTip="Filter zurücksetzen" BorderThickness="0" Background="Transparent">
+					<iconPacks:PackIconMaterial Kind="Close"/>
+				</Button>
+			</Grid>
+		</Expander>
+	</DataTemplate>
+
+	<DataTemplate x:Key="EnumDataTemplate">
+		<Expander Header="{Binding DisplayName}" Style="{StaticResource FilterCriteriumExpander}">
+			<!--<Expander.IsExpanded>
+                <MultiBinding Mode="TwoWay" Converter="{StaticResource FilterToIsExpandedConverter}">
+                    <Binding Path="SelectedValue" Mode="OneWay"/>
+                    <Binding Path="DefaultValue" Mode="OneWay"/>
+                    <Binding Path="." Mode="OneWay"/>
+                </MultiBinding>
+            </Expander.IsExpanded>-->
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
+
+				<controls:MultiSelectComboBox 
+                     HorizontalAlignment="Stretch"
+                     Margin="0,0,0,2"
+                     ItemsSource="{Binding EnumValues}"
+                     SelectedItems="{Binding SelectedItems, Mode=TwoWay}"
+                    ToolTip="{Binding Path=Text, RelativeSource={RelativeSource Self}}">
+				</controls:MultiSelectComboBox>
+
+				<Button Grid.Column="1" Command="{Binding ResetFilter}" ToolTip="Filter zurücksetzen" VerticalAlignment="Top" BorderThickness="0" Background="Transparent">
+					<iconPacks:PackIconMaterial Kind="Close"/>
+				</Button>
+			</Grid>
+		</Expander>
+	</DataTemplate>
+
+	<DataTemplate x:Key="BooleanDataTemplate">
+		<Expander Header="{Binding DisplayName}" Style="{StaticResource FilterCriteriumExpander}">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
+
+				<controls:MultiSelectComboBox 
+                     HorizontalAlignment="Stretch"
+                     Margin="0,0,0,2"
+                     ItemsSource="{Binding BooleanValues}"
+                     SelectedItems="{Binding SelectedItems, Mode=TwoWay}"
+                    ToolTip="{Binding Path=Text, RelativeSource={RelativeSource Self}}">
+				</controls:MultiSelectComboBox>
+
+				<Button Grid.Column="1" Command="{Binding ResetFilter}" ToolTip="Filter zurücksetzen" VerticalAlignment="Top" BorderThickness="0" Background="Transparent">
+					<iconPacks:PackIconMaterial Kind="Close"/>
+				</Button>
+			</Grid>
+		</Expander>
+	</DataTemplate>
+
+	<DataTemplate x:Key="DefaultDataTemplate">
+
+	</DataTemplate>
+
+	<DataTemplate x:Key="EntityDataTemplate">
+		<Expander Header="{Binding DisplayName}" Style="{StaticResource FilterCriteriumExpander}">
+			<!--<Expander.IsExpanded>
+                <MultiBinding Mode="TwoWay" Converter="{StaticResource FilterToIsExpandedConverter}">
+                    <Binding Path="SelectedValue" Mode="OneWay"/>
+                    <Binding Path="DefaultValue" Mode="OneWay"/>
+                    <Binding Path="." Mode="OneWay"/>
+                </MultiBinding>
+            </Expander.IsExpanded>-->
+
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
+
+				<controls:MultiSelectComboBox 
+                     HorizontalAlignment="Stretch"
+                     Margin="0,0,0,0"
+                     ItemsSource="{Binding Lookup}"
+                     SelectedItems="{Binding SelectedItems, Mode=TwoWay}"
+                    ToolTip="{Binding Path=Text, RelativeSource={RelativeSource Self}}">
+					<i:Interaction.Triggers>
+						<i:EventTrigger EventName="DropDownOpened">
+							<i:InvokeCommandAction Command="{Binding RefreshLookupCommand}"/>
+						</i:EventTrigger>
+					</i:Interaction.Triggers>
+				</controls:MultiSelectComboBox>
+
+				<Button Grid.Column="1" Command="{Binding ResetFilter}" ToolTip="Filter zurücksetzen" VerticalAlignment="Top" BorderThickness="0" Background="Transparent">
+					<iconPacks:PackIconMaterial Kind="Close"/>
+				</Button>
+			</Grid>
+		</Expander>
+	</DataTemplate>
+
+	<templates:FilterDescriptionTemplateSelector x:Key="FilterDescriptionTemplateSelector"
+              DefaultDataTemplate="{StaticResource DefaultDataTemplate}"
+              EnumDataTemplate="{StaticResource EnumDataTemplate}"
+              DateDataTemplate="{StaticResource DateDataTemplate}"
+			  NumberDataTemplate="{StaticResource NumberDataTemplate}"
+              BooleanDataTemplate="{StaticResource BooleanDataTemplate}"
+              EntityDataTemplate="{StaticResource EntityDataTemplate}"/>
+
+	<Style TargetType="{x:Type controls:EntityContentControl}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type controls:EntityContentControl}">
+					<Grid FocusManager.FocusedElement="{Binding ElementName=Properties}">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition  MinWidth="200" Width="300"/>
+							<ColumnDefinition/>
+							<ColumnDefinition  MinWidth="250" Width="Auto"/>
+						</Grid.ColumnDefinitions>
+
+						<ScrollViewer Margin="5,0">
+							<Grid>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="Auto"/>
+									<RowDefinition Height="*"/>
+								</Grid.RowDefinitions>
+								<Border BorderThickness="2,2,2,2" BorderBrush="{DynamicResource AccentColorBrush}">
+
+									<StackPanel Orientation="Vertical">
+										<TextBlock Text="{TemplateBinding EntityName}" HorizontalAlignment="Left" Width="250" TextWrapping="WrapWithOverflow" FontSize="21" Margin="10,0,10,10" />
+
+
+										<StackPanel Orientation="Vertical">
+											<ContentPresenter Content="{TemplateBinding BrowserCommandPanel}"/>
+
+											<Expander Header="Filtern" Visibility="{TemplateBinding HideDecoration, Converter={StaticResource NegatedBooleanToVisibility}}" ToolTip="Einträge nach Kriterien filtern">
+
+												<StackPanel Orientation="Vertical" Margin="0">
+													<Button  Command="{Binding ClearFilterCommand}" 
+                                                             Background="Transparent" BorderThickness="0" HorizontalAlignment="Right" Margin="0" 
+                                                             ToolTip="Alle Filter zurücksetzen">
+														<StackPanel Orientation="Horizontal">
+															<iconPacks:PackIconMaterial Width="11" Height="11" Margin="0,4,0,0" Kind="FilterRemoveOutline" />
+															<TextBlock Text="Alle Filter zurücksetzen" FontSize="12" Margin="5,0,0,0" />
+														</StackPanel>
+													</Button>
+													<Expander Header="Aktiv/Archiviert" Style="{StaticResource FilterCriteriumExpander}" Visibility="{TemplateBinding HideActiveFilter, Converter={StaticResource NegatedBooleanToVisibility}}">
+														<StackPanel Orientation="Vertical" Margin="10,5,10,0">
+															<CheckBox IsChecked="{Binding Path=UserFilter[Aktive],  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="Aktive Einträge anzeigen" FontSize="12"/>
+															<CheckBox IsChecked="{Binding Path=UserFilter[Archivierte],  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="Archivierte Einträge anzeigen" FontSize="12"/>
+														</StackPanel>
+													</Expander>
+													<ListBox Margin="0" ItemsSource="{Binding UserFilter.UserFilterDescriptions}" ItemTemplateSelector="{StaticResource FilterDescriptionTemplateSelector}"
+                                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+														<ListBox.ItemContainerStyle>
+															<Style TargetType="{x:Type ListBoxItem}">
+																<Setter Property="Background" Value="Transparent" />
+																<Setter Property="Template">
+																	<Setter.Value>
+																		<ControlTemplate TargetType="{x:Type ListBoxItem}">
+																			<ContentPresenter />
+																		</ControlTemplate>
+																	</Setter.Value>
+																</Setter>
+															</Style>
+														</ListBox.ItemContainerStyle>
+													</ListBox>
+
+													<ContentPresenter Margin="0" Content="{TemplateBinding CustomBrowserFilterPanel}"/>
+												</StackPanel>
+											</Expander>
+
+											<Expander Header="Sortieren" Margin="0,1" Visibility="{TemplateBinding HideDecoration, Converter={StaticResource NegatedBooleanToVisibility}}" ToolTip="Einträge nach Kriterien sortieren">
+												<Grid>
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition Width="*"/>
+														<ColumnDefinition Width="Auto"/>
+													</Grid.ColumnDefinitions>
+													<ComboBox  HorizontalAlignment="Stretch"
+                                                           Margin="0"
+                                                           ItemsSource="{Binding AllSortDescriptions}"
+                                                           SelectedValue="{Binding CurrentUserSortDescription, Mode=TwoWay}"
+                                                           IsTextSearchEnabled="True"
+                                                           IsEditable="True"
+                                                           DisplayMemberPath="Key"
+                                                           SelectedValuePath="Key">
+													</ComboBox>
+
+													<Button Grid.Column="1" Command="{Binding ToggleSortDirectionCommand}" BorderThickness="0" Background="Transparent">
+														<iconPacks:PackIconMaterial >
+															<iconPacks:PackIconMaterial.Style>
+																<Style TargetType="iconPacks:PackIconMaterial"  BasedOn="{StaticResource {x:Type iconPacks:PackIconMaterial}}">
+																	<Setter Property="Kind" Value="SortAscending"/>
+																	<Style.Triggers>
+																		<DataTrigger Binding="{Binding Path=CurrentListSortDirection, Mode=TwoWay, Converter={StaticResource ListSortDirectionToBooleanConverter}}" Value="false">
+																			<Setter Property="Kind" Value="SortDescending"/>
+																		</DataTrigger>
+																	</Style.Triggers>
+																</Style>
+															</iconPacks:PackIconMaterial.Style>
+														</iconPacks:PackIconMaterial>
+													</Button>
+												</Grid>
+
+											</Expander>
+										</StackPanel>
+
+										<DockPanel LastChildFill="True" Margin="5,0,5,5" Visibility="{TemplateBinding HideDecoration, Converter={StaticResource NegatedBooleanToVisibility}}" ToolTip="Suchen...">
+											<!--<TextBlock Text="{Binding Content, RelativeSource={RelativeSource Mode=TemplatedParent}}"/>-->
+											<iconPacks:PackIconFontAwesome Width="22" Height="22" DockPanel.Dock="Right" Kind="SearchSolid" Margin="5"/>
+											<TextBox 
+                                    x:Name="txtName" VerticalContentAlignment="Center" Margin="0" 
+                                    Text="{Binding Path=UserFilter.SearchString,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     Controls:TextBoxHelper.ClearTextButton="True"
+                                     Controls:TextBoxHelper.IsWaitingForData="False"
+                                     Controls:TextBoxHelper.UseFloatingWatermark="True"
+                                     Controls:TextBoxHelper.Watermark="Suchen..."
+                                    ToolTip="Suchen" />
+										</DockPanel>
+									</StackPanel>
+								</Border>
+
+
+								<ContentPresenter Grid.Row="1" Content="{TemplateBinding BrowserControl}"/>
+
+							</Grid>
+						</ScrollViewer>
+						<GridSplitter Width="2" HorizontalAlignment="Right" VerticalAlignment="Stretch" ResizeBehavior="CurrentAndNext" IsTabStop="False"/>
+
+						<GroupBox Header="{Binding DetailsTitle}" x:Name="Properties" Grid.Column="1" Grid.ColumnSpan="2"
+                                  HorizontalAlignment="Stretch" Margin="10,0,0,0" 
+                                  Visibility="{Binding SelectedItem, Converter={StaticResource ObjectToVisibilityConverter}}">
+
+							<DockPanel >
+
+								<Expander DockPanel.Dock="Right" x:Name="SummaryExpander" ExpandDirection="Left" IsExpanded="False">
+								<Expander.Header>
+									<TextBlock Text="Übersicht" Foreground="{DynamicResource TabItemForegroundIsSelectedBrush}">
+										<TextBlock.LayoutTransform>
+											<RotateTransform Angle="90"/>
+										</TextBlock.LayoutTransform>
+									</TextBlock>
+								</Expander.Header>
+								<ScrollViewer  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+									<ContentPresenter Content="{TemplateBinding SummaryPanel}" x:Name="SummaryPanel"/>
+								</ScrollViewer>
+								</Expander>
+
+
+								<Grid>
+									<Grid.RowDefinitions>
+										<RowDefinition Height="4*" />
+										<RowDefinition Height="5" />
+										<RowDefinition> <!-- Hide / show outut panel (bottom dock) if a content is set-->
+											<RowDefinition.Style>
+												<Style TargetType="{x:Type RowDefinition}">
+													<Setter Property="Height" Value="1*" />
+													<Style.Triggers>
+														<DataTrigger Binding="{Binding ElementName=OutputPanel, Path=Content}" Value="{x:Null}">
+															<Setter Property="Height" Value="Auto" />
+														</DataTrigger>
+													</Style.Triggers>
+												</Style>
+											</RowDefinition.Style>
+										</RowDefinition>
+									</Grid.RowDefinitions>
+
+									<ScrollViewer x:Name="PART_DetailsScrollViewer" DockPanel.Dock="Top" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+										
+											<StackPanel DockPanel.Dock="Top" Margin="5,5,20,5"  HorizontalAlignment="Stretch">
+												<ContentPresenter Content="{TemplateBinding DetailsPanel}"/>
+											</StackPanel>
+										
+									</ScrollViewer>
+
+									<GridSplitter Grid.Row="1" Height="2" HorizontalAlignment="Stretch" x:Name="OutputSplitter" />
+
+									<GroupBox Grid.Row="2" Margin="0,0,3,0" DockPanel.Dock="Bottom" x:Name="OutputExpander" Header="{TemplateBinding OutputPanelHeader}">
+									
+									<ContentPresenter Content="{TemplateBinding OutputPanel}" x:Name="OutputPanel"/>
+									
+								</GroupBox>
+								</Grid>
+							</DockPanel>
+						</GroupBox>
+
+					</Grid>
+
+					<ControlTemplate.Triggers>
+						<DataTrigger Binding="{Binding ElementName=SummaryPanel, Path=Content}" Value="{x:Null}">
+							<Setter TargetName="SummaryExpander" Property="Visibility" Value="Collapsed"/>
+						</DataTrigger>
+						<DataTrigger Binding="{Binding ElementName=OutputPanel, Path=Content}" Value="{x:Null}">
+							<Setter TargetName="OutputExpander" Property="Visibility" Value="Collapsed"/>
+							<Setter TargetName="OutputSplitter" Property="Visibility" Value="Collapsed"/>
+						</DataTrigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key="NumericUpDownCellStyle" TargetType="{x:Type Controls:NumericUpDown}">
+		<Setter Property="HideUpDownButtons" Value="False"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="HorizontalContentAlignment" Value="Left"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="HasDecimals" Value="True"/>
+		<Setter Property="Culture" Value="de-DE"/>
+		<Setter Property="Controls:TextBoxHelper.SelectAllOnFocus" Value="True"/>
+	</Style>
+
+	<Style x:Key="IntervalNumericUpDownIntegerStyle" TargetType="{x:Type Controls:NumericUpDown}">
+		<Setter Property="HideUpDownButtons" Value="False"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="HorizontalContentAlignment" Value="Left"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="HasDecimals" Value="False"/>
+		<Setter Property="Culture" Value="de-DE"/>
+		<Setter Property="Minimum" Value="0"/>
+		<Setter Property="Maximum" Value="100000"/>
+		<Setter Property="Interval" Value="1"/>
+		<Setter Property="MinWidth" Value="80"/>
+		<Setter Property="Controls:TextBoxHelper.SelectAllOnFocus" Value="True"/>
+	</Style>
+
+	<Style x:Key="IntervalNumericUpDownDecimalStyle" TargetType="{x:Type Controls:NumericUpDown}">
+		<Setter Property="HideUpDownButtons" Value="False"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="HorizontalContentAlignment" Value="Left"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="HasDecimals" Value="True"/>
+		<Setter Property="Culture" Value="de-DE"/>
+		<Setter Property="Minimum" Value="0"/>
+		<Setter Property="Maximum" Value="100"/>
+		<Setter Property="Interval" Value="0.1"/>
+		<Setter Property="MinWidth" Value="80"/>
+		<Setter Property="Controls:TextBoxHelper.SelectAllOnFocus" Value="True"/>
+	</Style>
+
+	<Style x:Key="NumericUpDownStyle" TargetType="{x:Type Controls:NumericUpDown}">
+		<Setter Property="HideUpDownButtons" Value="False"/>
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="HorizontalContentAlignment" Value="Left"/>
+		<Setter Property="Width" Value="125"/>
+		<Setter Property="Margin" Value="0,0,0,15"/>
+		<Setter Property="Interval" Value="1"/>
+		<Setter Property="HasDecimals" Value="True"/>
+		<Setter Property="Culture" Value="de-DE"/>
+		<Setter Property="Controls:TextBoxHelper.SelectAllOnFocus" Value="True"/>
+	</Style>
+
+	<Style x:Key="NumericUpDownForLength" TargetType="{x:Type Controls:NumericUpDown}" BasedOn="{StaticResource NumericUpDownStyle}">
+		<Setter Property="HasDecimals" Value="True"/>
+		<Setter Property="Minimum" Value="0"/>
+		<Setter Property="Maximum" Value="100"/>
+		<Setter Property="StringFormat" Value=" {0:N2} m"/>
+		<Setter Property="Culture" Value="de-DE"/>
+	</Style>
+
+	<Style x:Key="NumericUpDownForPeriod" TargetType="{x:Type Controls:NumericUpDown}" BasedOn="{StaticResource NumericUpDownStyle}">
+		<Setter Property="HasDecimals" Value="False"/>
+		<Setter Property="Minimum" Value="10"/>
+		<Setter Property="Maximum" Value="3600"/>
+		<Setter Property="StringFormat" Value=" {0:N0} s"/>
+		<Setter Property="Interval" Value="15"/>
+		<Setter Property="Culture" Value="de-DE"/>
+	</Style>
+	
+
+	<Style x:Key="NumericUpDownForAngle" TargetType="{x:Type Controls:NumericUpDown}" BasedOn="{StaticResource NumericUpDownStyle}">
+		<Setter Property="HasDecimals" Value="True"/>
+		<Setter Property="Minimum" Value="0"/>
+		<Setter Property="Maximum" Value="90"/>
+		<Setter Property="StringFormat" Value=" {0:N2} °"/>
+		<Setter Property="Culture" Value="de-DE"/>
+	</Style>
+
+	<Style x:Key="NumericUpDownForDensity" TargetType="{x:Type Controls:NumericUpDown}" BasedOn="{StaticResource NumericUpDownStyle}">
+		<Setter Property="HasDecimals" Value="True"/>
+		<Setter Property="Minimum" Value="0"/>
+		<Setter Property="Maximum" Value="10000"/>
+		<Setter Property="StringFormat" Value=" {0:N2} kg/m3"/>
+		<Setter Property="Culture" Value="de-DE"/>
+	</Style>
+	
+	<Style x:Key="NumericUpDownForFriction" TargetType="{x:Type Controls:NumericUpDown}" BasedOn="{StaticResource NumericUpDownStyle}">
+		<Setter Property="HasDecimals" Value="True"/>
+		<Setter Property="Minimum" Value="0"/>
+		<Setter Property="Maximum" Value="1"/>
+		<Setter Property="Interval" Value="0.1"/>
+		<Setter Property="StringFormat" Value="F2"/>
+		<Setter Property="Culture" Value="de-DE"/>
+	</Style>
+
+
+	<Style x:Key="NumericUpDownForWeight" TargetType="{x:Type Controls:NumericUpDown}" BasedOn="{StaticResource NumericUpDownStyle}">
+		<Setter Property="StringFormat" Value=" {0:N1} kg"/>
+	</Style>
+
+	<Style x:Key="NumericUpDownForPrice" TargetType="{x:Type Controls:NumericUpDown}" BasedOn="{StaticResource NumericUpDownStyle}">
+		<Setter Property="StringFormat" Value=" {0:N2} €"/>
+		<Setter Property="Maximum" Value="1000000000"/>
+	</Style>
+
+	<Style x:Key="NumericUpDownForPercentage" TargetType="{x:Type Controls:NumericUpDown}" BasedOn="{StaticResource NumericUpDownCellStyle}">
+		<Setter Property="HideUpDownButtons" Value="False"/>
+		<Setter Property="Interval" Value="1"/>
+		<Setter Property="Minimum" Value="0"/>
+		<Setter Property="Maximum" Value="100"/>
+		<Setter Property="StringFormat" Value=" {0:N2} %"/>
+	</Style>
+
+	<Style x:Key="NumericUpDownForPositveCount" TargetType="{x:Type Controls:NumericUpDown}" BasedOn="{StaticResource NumericUpDownStyle}">
+		<Setter Property="HideUpDownButtons" Value="False"/>
+		<Setter Property="Interval" Value="1"/>
+		<Setter Property="Minimum" Value="1"/>
+		<Setter Property="HasDecimals" Value="False"/>
+		<Setter Property="Culture" Value="de-DE"/>
+	</Style>
+
+	<Style x:Key="NumericUpDownForVolume" TargetType="{x:Type Controls:NumericUpDown}" BasedOn="{StaticResource NumericUpDownStyle}">
+		<Setter Property="HideUpDownButtons" Value="False"/>
+		<Setter Property="Interval" Value="0.01"/>
+		<Setter Property="Minimum" Value="0"/>
+		<Setter Property="HasDecimals" Value="True"/>
+		<Setter Property="Culture" Value="de-DE"/>
+		<Setter Property="StringFormat" Value=" {0:N2} Fm."/>
+	</Style>
+
+
+	<Style x:Key="SettingPropertyText" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="VerticalAlignment" Value="Top"/>
+		<Setter Property="Margin" Value="0,3,10,0"/>
+	</Style>
+
+	<Style x:Key="ListViewStatisticsStyle" TargetType="{x:Type ListView}" BasedOn="{StaticResource {x:Type ListView}}">
+		<Setter Property="BorderThickness" Value="2"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource AccentColorBrush}"/>
+	</Style>
+
+	<Style TargetType="{x:Type GridViewColumnHeader}" BasedOn="{StaticResource {x:Type GridViewColumnHeader}}">
+		<Setter Property="Margin" Value="0,0,0,0"/>
+	</Style>
+
+
+
+</ResourceDictionary>

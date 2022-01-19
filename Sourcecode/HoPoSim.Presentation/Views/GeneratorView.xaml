@@ -1,0 +1,733 @@
+﻿ <UserControl x:Class="HoPoSim.Presentation.Views.GeneratorView"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:prism="http://prismlibrary.com/"
+			 xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+			 xmlns:controls="clr-namespace:HoPoSim.Presentation.Controls"
+			 xmlns:converters="clr-namespace:HoPoSim.Presentation.Converters"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			  d:DesignHeight="1300" d:DesignWidth="1300"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			  xmlns:System="clr-namespace:System;assembly=mscorlib"
+			 mc:Ignorable="d" 
+			 x:Name="GeneratorUserControl"
+			 prism:ViewModelLocator.AutoWireViewModel="True">
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/HoPoSim.Presentation;component/Styles/Generic.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+			<converters:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter"/>
+			<converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+			<converters:ObjectsEqualToVisibilityConverter x:Key="ObjectsEqualToVisibilityConverter"/>
+			<converters:VisibilityAndConverter x:Key="VisibilityAndConverter"/>
+			<converters:AnteilPercentToAbsoluteConverter x:Key="AnteilPercentToAbsoluteConverter" Stammanzahl="{Binding Source={x:Reference GeneratorUserControl}, Path=DataContext.SelectedItem.Stammanzahl}"/>
+			<converters:DistributionToBrushConverter x:Key="DistributionToBrushConverter"/>
+			<System:Boolean x:Key="TrueValue">True</System:Boolean>
+			<System:Boolean x:Key="FalseValue">False</System:Boolean>
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+
+	<controls:EntityContentControl EntityName="Generatordaten" x:Name="entityContentControl" HideActiveFilter="True">
+		<controls:EntityContentControl.BrowserCommandPanel>
+			<StackPanel Orientation="Vertical">
+				<controls:EntityCommandControl Command="{Binding AddCommand}" CommandTriggered="EntityCommandControl_CommandTriggered" Text="Neuen Datensatz erfassen" Tooltip="Neuen Datensatz erfassen" IconMaterialKind="PlusCircleOutline"/>
+				<controls:EntityCommandControl Command="{Binding CopyCommand}"  CommandTriggered="EntityCommandControl_CommandTriggered" Text="Datensatz duplizieren" Tooltip="Ausgewählten Datensatz kopieren" IconMaterialKind="ContentCopy"/>
+				<controls:EntityCommandControl Command="{Binding ExportCommand}" Text="Einzelstammdaten generieren" Tooltip="Einzelstammdaten-Tabelle generieren und als Excel-Datei exportieren" IconMaterialKind="Export"/>
+				<controls:EntityCommandControl Command="{Binding DeleteCommand}" Text="Datensatz löschen" Tooltip="Ausgewählten Datensatz löschen" IconMaterialKind="MinusCircleOutline"/>
+				<!--<controls:EntityCommandControl Command="{Binding RestoreCommand}" Text="Datengrundlage wiederherstellen" Tooltip="Ausgewählte Datengrundlage wiederherstellen" IconMaterialKind="BackupRestore"/>-->
+				<!--<controls:EntityCommandControl Command="{Binding ExportExcelCommand}" Text="Als Exceldatei exportieren" Tooltip="Ausgefilterte Datengrundlage als Exceldatei exportieren" IconMaterialKind="Export"/>-->
+			</StackPanel>
+		</controls:EntityContentControl.BrowserCommandPanel>
+
+		<controls:EntityContentControl.BrowserControl>
+			<controls:ListBoxEntityBrowser>
+				<controls:ListBoxEntityBrowser.BrowserItemTemplate>
+					<DataTemplate>
+						<WrapPanel>
+							<TextBlock Text="{Binding Name}" />
+						</WrapPanel>
+					</DataTemplate>
+				</controls:ListBoxEntityBrowser.BrowserItemTemplate>
+			</controls:ListBoxEntityBrowser>
+		</controls:EntityContentControl.BrowserControl>
+
+		<controls:EntityContentControl.DetailsPanel>
+			<StackPanel Orientation="Vertical">
+				<Grid Background="Transparent" Margin="10,10,10,20"  HorizontalAlignment="Stretch">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="100"/>
+						<ColumnDefinition Width="150"/>
+						<ColumnDefinition Width="150"/>
+						<ColumnDefinition Width="150"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="5"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+
+					<TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource LeftTextBlock}" FontWeight="Bold">Name</TextBlock>
+					<TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding SelectedItem.Name, Mode=TwoWay, UpdateSourceTrigger=Default}" x:Name="nameTextBox" ToolTip="Bezeichnung des aktuellen Datensatz." />
+
+					<TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource LeftTextBlock}" FontWeight="Bold">Stammanzahl</TextBlock>
+					<Controls:NumericUpDown Grid.Row="1" Grid.Column="1" Style="{StaticResource NumericUpDownForPositveCount}" Maximum="5000" StringFormat=" {0:N0} Stck." HorizontalAlignment="Left" HorizontalContentAlignment="Left" Width="125" Margin="0" 
+											Value="{Binding SelectedItem.Stammanzahl, Mode=TwoWay}" KeyUp="NumericUpDown_KeyUp" ToolTip="Die Anzahl der zu generierenden Stämme."/>
+
+					<TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource LeftTextBlock}" FontWeight="Bold">Länge</TextBlock>
+					<Controls:NumericUpDown Style="{StaticResource NumericUpDownForLength}" ToolTip="Die Länge (in Metern) der zu generierenden Stämme."
+								Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Width="125" Margin="0" 
+											Value="{Binding SelectedItem.Länge, Mode=TwoWay, UpdateSourceTrigger=Default}"/>
+					<TextBlock Grid.Row="3" Grid.Column="2" Style="{StaticResource RightTextBlock}" FontWeight="Bold">Max. Abweichung</TextBlock>
+					<Controls:NumericUpDown Style="{StaticResource NumericUpDownForPercentage}" Maximum="10" ToolTip="Die maximale (zufällige) Variation der Stammlängen (in %)"
+								Grid.Row="3" Grid.Column="3" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Width="125" Margin="0" 
+											Value="{Binding SelectedItem.LängeVariation, Mode=TwoWay, UpdateSourceTrigger=Default}"/>
+				</Grid>
+
+				<GroupBox Header="Mittendurchmesserklassen" BorderThickness="1" x:Name="MittendurchmesserGroup" ToolTip="Definition von der Mittendurchmesserklassen mit jeweiligen Rindenanteilen">
+					<Grid Margin="5">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="160"/>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="160"/>
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="30" SharedSizeGroup="Row0"/>
+							<RowDefinition Height="30" SharedSizeGroup="Row1"/>
+							<RowDefinition Height="30" SharedSizeGroup="Row2"/>
+							<RowDefinition Height="30" SharedSizeGroup="Row3"/>
+							<RowDefinition Height="30" SharedSizeGroup="Row4"/>
+						</Grid.RowDefinitions>
+
+						<Grid Grid.RowSpan="5">
+							<Grid.RowDefinitions>
+								<RowDefinition Height="30" SharedSizeGroup="Row0"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row1"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row2"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row3"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row4"/>
+							</Grid.RowDefinitions>
+							<Grid.Resources>
+								<Style x:Key="TableRowHeaderTextBlock" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+									<Setter Property="HorizontalAlignment" Value="Left"/>
+									<Setter Property="VerticalAlignment" Value="Top"/>
+									<Setter Property="Margin" Value="5,5,10,5"/>
+									<Setter Property="FontWeight" Value="Bold"/>
+								</Style>
+							</Grid.Resources>
+							<TextBlock Grid.Row="0" Text="Klasse" Style="{DynamicResource TableRowHeaderTextBlock}"/>
+							<TextBlock Grid.Row="1" Text="von/bis (mm)" Style="{DynamicResource TableRowHeaderTextBlock}"/>
+							<TextBlock Grid.Row="2" Text="Rindenstärke" Style="{DynamicResource TableRowHeaderTextBlock}"/>
+							<TextBlock Grid.Row="3" Text="Anteil %" Style="{DynamicResource TableRowHeaderTextBlock}"/>
+							<TextBlock Grid.Row="4" Text="Anteil N" ToolTip="Anteil N (absolute Anzahl)" Style="{DynamicResource TableRowHeaderTextBlock}"/>
+						</Grid>
+						<ItemsControl Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" ItemsSource="{Binding SelectedItem.DurchmesserDistributions, Mode=OneWay}" IsTabStop="False">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel Orientation="Horizontal"/>
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<RadioButton Width="160" Margin="0" IsChecked="{Binding IsSelected, Mode=TwoWay}" BorderThickness="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalAlignment="Center" GroupName="Mittendurchmesser" Style="{StaticResource {x:Type ToggleButton}}" ToolTip="Mittendurchmesserklasse selektieren" IsTabStop="False">
+										<RadioButton.Content>
+											<TextBlock Text="{Binding RangeId}" FontWeight="Bold"/>
+										</RadioButton.Content>
+										<RadioButton.BorderBrush>
+											<MultiBinding Converter="{StaticResource DistributionToBrushConverter}">
+												<Binding Path="DataContext.SelectedItem.Entity" ElementName="GeneratorUserControl" Mode="OneWay"/>
+												<Binding Path="Entity" Mode="OneWay"/>
+											</MultiBinding>
+										</RadioButton.BorderBrush>
+									</RadioButton>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+						
+						<ItemsControl Name="DurchmesserItemsControl" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"  ItemsSource="{Binding SelectedItem.DurchmesserView, Mode=OneWay}">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel Orientation="Horizontal"/>
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Grid>
+										<Grid.RowDefinitions>
+											<RowDefinition Height="30" SharedSizeGroup="Row0"/>
+											<RowDefinition Height="30" SharedSizeGroup="Row1"/>
+											<RowDefinition Height="30" SharedSizeGroup="Row2"/>
+											<RowDefinition Height="30" SharedSizeGroup="Row3"/>
+										</Grid.RowDefinitions>
+										<!--<Border BorderThickness="1" ToolTip="Klasse" FocusManager.IsFocusScope="False">
+											<TextBlock Text="{Binding RangeId}" ToolTip="Klasse" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FocusManager.IsFocusScope="False"/>
+											<Border.BorderBrush>
+												<MultiBinding Converter="{StaticResource DistributionToBrushConverter}">
+													<Binding Path="DataContext.SelectedItem.Entity" ElementName="GeneratorUserControl" Mode="OneWay"/>
+													<Binding Path="DataContext.SelectedItem.Distribution.Entity" ElementName="GeneratorUserControl" Mode="OneWay"/>
+												</MultiBinding>
+											</Border.BorderBrush>
+										</Border>-->
+										
+										<StackPanel Grid.Row="0" Orientation="Horizontal">
+											<Controls:NumericUpDown Value="{Binding MinValue, Mode=TwoWay}" Style="{StaticResource IntervalNumericUpDownIntegerStyle}" Controls:TextBoxHelper.Watermark="von" ToolTip="Durchmesser min. (mm)"/>
+											<Controls:NumericUpDown Value="{Binding MaxValue, Mode=TwoWay}" Style="{StaticResource IntervalNumericUpDownIntegerStyle}" Controls:TextBoxHelper.Watermark="bis" ToolTip="Durchmesser max. (mm)"/>
+										</StackPanel>
+										<Controls:NumericUpDown Value="{Binding Rindenstärke, Mode=TwoWay}" Grid.Row="1" Style="{StaticResource NumericUpDownCellStyle}" Minimum="0" Maximum="100000" Interval="1" StringFormat=" {0:N0} mm" ToolTip="Rindenstärke der Klasse (mm)"/>
+									</Grid>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+
+						<ItemsControl Name="DurchmesserDistributionItemsControl" Grid.Column="1" Grid.Row="3" Grid.RowSpan="2"  ItemsSource="{Binding SelectedItem.DurchmesserDistributions, Mode=OneWay}">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel Orientation="Horizontal"/>
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<StackPanel Orientation="Vertical">
+										<Controls:NumericUpDown Value="{Binding Percent, Mode=TwoWay}" Grid.Row="0" Width="160" Height="30" Style="{StaticResource NumericUpDownForPercentage}" ToolTip="Anteil % für diese Klasse"/>
+										<Controls:NumericUpDown Value="{Binding Absolute, Mode=TwoWay}" Grid.Row="1" Style="{StaticResource NumericUpDownCellStyle}" Height="30" BorderThickness="2" Minimum="0" Interval="1" StringFormat=" {0:N0} Stck." ToolTip="Anteil N (absolute Anzahl) fuer diese Klasse">
+											<Controls:NumericUpDown.BorderBrush>
+												<MultiBinding Converter="{StaticResource DistributionToBrushConverter}" ConverterParameter="{StaticResource TrueValue}">
+													<Binding Path="DataContext.SelectedItem.Entity" ElementName="GeneratorUserControl" Mode="OneWay"/>
+													<Binding Path="Entity" Mode="OneWay"/>
+												</MultiBinding>
+											</Controls:NumericUpDown.BorderBrush>
+										</Controls:NumericUpDown>
+									</StackPanel>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+
+						<Grid Grid.Column="2" Grid.RowSpan="5" Width="150" HorizontalAlignment="Left">
+							<Grid.RowDefinitions>
+								<RowDefinition Height="30" SharedSizeGroup="Row0"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row1"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row2"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row3"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row4"/>
+							</Grid.RowDefinitions>
+							<TextBlock Text="&#931;" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FocusManager.IsFocusScope="False"/>
+							<Controls:NumericUpDown  Grid.Row="3" Value="{Binding SelectedItem.DurchmesserPercentSum, Mode=OneWay}" Style="{StaticResource NumericUpDownForPercentage}" FontWeight="Bold" IsReadOnly="True" Maximum="1000000" HideUpDownButtons="True"  FocusManager.IsFocusScope="False"/>
+							<Controls:NumericUpDown  Grid.Row="4" Value="{Binding SelectedItem.DurchmesserAbsoluteSum, Mode=OneWay}" Style="{StaticResource NumericUpDownCellStyle}" BorderThickness="2" FontWeight="Bold" StringFormat=" {0:N0} Stck." IsReadOnly="True" HideUpDownButtons="True" FocusManager.IsFocusScope="False">
+								<Controls:NumericUpDown.BorderBrush>
+									<MultiBinding Converter="{StaticResource DistributionToBrushConverter}" ConverterParameter="{StaticResource TrueValue}">
+										<Binding Path="SelectedItem.Entity" Mode="OneWay"/>
+										<Binding Path="SelectedItem.Distribution.Entity" Mode="OneWay"/>
+									</MultiBinding>
+								</Controls:NumericUpDown.BorderBrush>
+							</Controls:NumericUpDown>
+						</Grid>
+					</Grid>
+				</GroupBox>
+
+				<GroupBox Header="Abholzigkeitsklassen" x:Name="AbholzigkeitGroup" ToolTip="Definition von der Abholzigkeitsklassen">
+					<Grid Margin="5">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="160"/>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="160"/>
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="30" SharedSizeGroup="Row0"/>
+							<RowDefinition Height="30" SharedSizeGroup="Row1"/>
+							<RowDefinition Height="30" SharedSizeGroup="Row2"/>
+							<RowDefinition Height="30" SharedSizeGroup="Row3"/>
+						</Grid.RowDefinitions>
+
+						<Grid Grid.RowSpan="5">
+							<Grid.RowDefinitions>
+								<RowDefinition Height="30" SharedSizeGroup="Row0"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row1"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row2"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row3"/>
+							</Grid.RowDefinitions>
+							<Grid.Resources>
+								<Style x:Key="TableRowHeaderTextBlock" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+									<Setter Property="HorizontalAlignment" Value="Left"/>
+									<Setter Property="VerticalAlignment" Value="Top"/>
+									<Setter Property="Margin" Value="5,5,10,5"/>
+									<Setter Property="FontWeight" Value="Bold"/>
+								</Style>
+							</Grid.Resources>
+							<TextBlock Grid.Row="0" Text="Klasse" Style="{DynamicResource TableRowHeaderTextBlock}"/>
+							<TextBlock Grid.Row="1" Text="von/bis (mm/lfm)" Style="{DynamicResource TableRowHeaderTextBlock}"/>
+							<TextBlock Grid.Row="2" Text="Anteil %" Style="{DynamicResource TableRowHeaderTextBlock}"/>
+							<TextBlock Grid.Row="3" Text="Anteil N" ToolTip="Anteil N (absolute Anzahl)" Style="{DynamicResource TableRowHeaderTextBlock}"/>
+						</Grid>
+						<ItemsControl Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" ItemsSource="{Binding SelectedItem.AbholzigkeitDistributions, Mode=OneWay}" IsTabStop="False">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel Orientation="Horizontal"/>
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<RadioButton Width="160" Margin="0" IsChecked="{Binding IsSelected, Mode=TwoWay}" BorderThickness="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalAlignment="Center" GroupName="AbholzigkeitDistribution" Style="{StaticResource {x:Type ToggleButton}}" ToolTip="Abholzigkeitsklasse selektieren" IsTabStop="False">
+										<RadioButton.Content>
+											<TextBlock Text="{Binding RangeId}"  FontWeight="Bold" />
+										</RadioButton.Content>
+										<RadioButton.BorderBrush>
+											<MultiBinding Converter="{StaticResource DistributionToBrushConverter}">
+												<Binding Path="DataContext.SelectedItem.Entity" ElementName="GeneratorUserControl" Mode="OneWay"/>
+												<Binding Path="Entity" Mode="OneWay"/>
+											</MultiBinding>
+										</RadioButton.BorderBrush>
+									</RadioButton>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+						
+						<ItemsControl Grid.Column="1" Grid.Row="1"  ItemsSource="{Binding SelectedItem.AbholzigkeitView, Mode=OneWay}">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel Orientation="Horizontal"/>
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Grid>
+										<Grid.RowDefinitions>
+											<RowDefinition Height="30" SharedSizeGroup="Row0"/>
+										</Grid.RowDefinitions>
+										<StackPanel Orientation="Horizontal">
+											<Controls:NumericUpDown Value="{Binding MinValue, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Style="{StaticResource IntervalNumericUpDownIntegerStyle}" Controls:TextBoxHelper.Watermark="von" ToolTip="Abholzigkeit min. (mm/lfm)"/>
+											<Controls:NumericUpDown Value="{Binding MaxValue, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Style="{StaticResource IntervalNumericUpDownIntegerStyle}" Controls:TextBoxHelper.Watermark="bis"  ToolTip="Abholzigkeit max. (mm/lfm)"/>
+										</StackPanel>
+									</Grid>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+
+						<!--<ItemsControl Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" ItemsSource="{Binding SelectedItem.DurchmesserDistributions, Mode=OneWay}" IsTabStop="False">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel Orientation="Horizontal"/>
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<RadioButton Width="160" Margin="0" IsChecked="{Binding IsSelected, Mode=TwoWay}" FontWeight="Bold" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalAlignment="Center" GroupName="Mittendurchmesser" Style="{StaticResource {x:Type ToggleButton}}" ToolTip="Mittendurchmesserklasse selektieren" IsTabStop="False">
+										<RadioButton.Content>
+											<TextBlock Text="{Binding RangeId, StringFormat='Anteil Klasse {0}'}"/>
+										</RadioButton.Content>
+										<RadioButton.BorderBrush>
+											<MultiBinding Converter="{StaticResource DistributionToBrushConverter}">
+												<Binding Path="DataContext.SelectedItem.Entity" ElementName="GeneratorUserControl" Mode="OneWay"/>
+												<Binding Path="Entity" Mode="OneWay"/>
+											</MultiBinding>
+										</RadioButton.BorderBrush>
+									</RadioButton>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>-->
+
+						<ItemsControl Grid.Column="1" Grid.Row="2" Grid.RowSpan="2"  ItemsSource="{Binding SelectedItem.AbholzigkeitDistributions, Mode=OneWay}">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel Orientation="Horizontal"/>
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<StackPanel Orientation="Vertical">
+										<Controls:NumericUpDown Value="{Binding Percent, Mode=TwoWay}" Grid.Row="0" Width="160" Height="30" Style="{StaticResource NumericUpDownForPercentage}" ToolTip="Anteil % für diese Klasse"/>
+										<Controls:NumericUpDown Value="{Binding Absolute, Mode=TwoWay}" Grid.Row="1" Style="{StaticResource NumericUpDownCellStyle}" BorderThickness="2" Height="30" Minimum="0" Interval="1" StringFormat=" {0:N0} Stck." ToolTip="Anteil N (absolute Anzahl) für diese Klasse">
+											<Controls:NumericUpDown.BorderBrush>
+												<MultiBinding Converter="{StaticResource DistributionToBrushConverter}" ConverterParameter="{StaticResource TrueValue}">
+													<Binding Path="DataContext.SelectedItem.Entity" ElementName="GeneratorUserControl" Mode="OneWay"/>
+													<Binding Path="Entity" Mode="OneWay"/>
+												</MultiBinding>
+											</Controls:NumericUpDown.BorderBrush>
+										</Controls:NumericUpDown>
+									</StackPanel>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+
+						<Grid Grid.Column="2" Grid.RowSpan="5" Width="150" HorizontalAlignment="Left">
+							<Grid.RowDefinitions>
+								<RowDefinition Height="30" SharedSizeGroup="Row0"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row1"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row2"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row3"/>
+							</Grid.RowDefinitions>
+							<TextBlock Text="&#931;" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FocusManager.IsFocusScope="False"/>
+							<Controls:NumericUpDown  Grid.Row="2" Value="{Binding SelectedItem.AbholzigkeitPercentSum, Mode=OneWay}" Style="{StaticResource NumericUpDownForPercentage}" FontWeight="Bold" IsReadOnly="True" Maximum="1000000" HideUpDownButtons="True"  FocusManager.IsFocusScope="False"/>
+							<Controls:NumericUpDown  Grid.Row="3" Value="{Binding SelectedItem.AbholzigkeitAbsoluteSum, Mode=OneWay}" Style="{StaticResource NumericUpDownCellStyle}" BorderThickness="2" FontWeight="Bold" StringFormat=" {0:N0} Stck." IsReadOnly="True" HideUpDownButtons="True" FocusManager.IsFocusScope="False">
+								<Controls:NumericUpDown.BorderBrush>
+									<MultiBinding Converter="{StaticResource DistributionToBrushConverter}" ConverterParameter="{StaticResource TrueValue}">
+										<Binding Path="SelectedItem.Entity" Mode="OneWay"/>
+										<Binding Path="SelectedItem.SelectedDurchmesser.Entity" Mode="OneWay"/>
+									</MultiBinding>
+								</Controls:NumericUpDown.BorderBrush>
+							</Controls:NumericUpDown>
+						</Grid>
+					</Grid>
+				</GroupBox>
+
+				<GroupBox Header="Krümmungsklassen" x:Name="KrümmungGroup" ToolTip="Definition von der Krümmungsklassen">
+					<Grid Margin="5">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="160"/>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="160"/>
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="30" SharedSizeGroup="Row0"/>
+							<RowDefinition Height="30" SharedSizeGroup="Row1"/>
+							<RowDefinition Height="30" SharedSizeGroup="Row2"/>
+							<RowDefinition Height="30" SharedSizeGroup="Row3"/>
+						</Grid.RowDefinitions>
+
+						<Grid Grid.RowSpan="5">
+							<Grid.RowDefinitions>
+								<RowDefinition Height="30" SharedSizeGroup="Row0"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row1"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row2"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row3"/>
+							</Grid.RowDefinitions>
+							<Grid.Resources>
+								<Style x:Key="TableRowHeaderTextBlock" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+									<Setter Property="HorizontalAlignment" Value="Left"/>
+									<Setter Property="VerticalAlignment" Value="Top"/>
+									<Setter Property="Margin" Value="5,5,10,5"/>
+									<Setter Property="FontWeight" Value="Bold"/>
+								</Style>
+							</Grid.Resources>
+							<TextBlock Grid.Row="0" Text="Klasse" Style="{DynamicResource TableRowHeaderTextBlock}"/>
+							<TextBlock Grid.Row="1" Text="von/bis (mm/lfm)" Style="{DynamicResource TableRowHeaderTextBlock}"/>
+							<TextBlock Grid.Row="2" Text="Anteil %" Style="{DynamicResource TableRowHeaderTextBlock}"/>
+							<TextBlock Grid.Row="3" Text="Anteil N" ToolTip="Anteil N (absolute Anzahl)" Style="{DynamicResource TableRowHeaderTextBlock}"/>
+						</Grid>
+
+						<ItemsControl Grid.Column="1" Grid.Row="0" ItemsSource="{Binding SelectedItem.KrümmungDistributions, Mode=OneWay}" IsTabStop="False">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel Orientation="Horizontal"/>
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<RadioButton Width="160" Margin="0" IsChecked="{Binding IsSelected, Mode=TwoWay}" BorderThickness="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalAlignment="Center" GroupName="KrümmungDistribution" Style="{StaticResource {x:Type ToggleButton}}" ToolTip="Krümmungsklasse selektieren" IsTabStop="False">
+										<RadioButton.Content>
+											<TextBlock Text="{Binding RangeId}"  FontWeight="Bold" />
+										</RadioButton.Content>
+										<RadioButton.BorderBrush>
+											<MultiBinding Converter="{StaticResource DistributionToBrushConverter}">
+												<Binding Path="DataContext.SelectedItem.Entity" ElementName="GeneratorUserControl" Mode="OneWay"/>
+												<Binding Path="Entity" Mode="OneWay"/>
+											</MultiBinding>
+										</RadioButton.BorderBrush>
+									</RadioButton>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+						
+						<ItemsControl Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"  ItemsSource="{Binding SelectedItem.KrümmungView, Mode=OneWay}" IsTabStop="False">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel Orientation="Horizontal"/>
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Grid>
+										<Grid.RowDefinitions>
+											<RowDefinition Height="30" SharedSizeGroup="Row0"/>
+											<RowDefinition Height="30" SharedSizeGroup="Row1"/>
+										</Grid.RowDefinitions>
+										<StackPanel Orientation="Horizontal">
+											<Controls:NumericUpDown Value="{Binding MinValue, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Style="{StaticResource IntervalNumericUpDownIntegerStyle}" Controls:TextBoxHelper.Watermark="von" ToolTip="Krümmung min. (mm/lfm)"/>
+											<Controls:NumericUpDown Value="{Binding MaxValue, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Style="{StaticResource IntervalNumericUpDownIntegerStyle}" Controls:TextBoxHelper.Watermark="bis" ToolTip="Krümmung max. (mm/lfm)"/>
+										</StackPanel>
+									</Grid>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+
+					
+
+						<ItemsControl Grid.Column="1" Grid.Row="2" Grid.RowSpan="2"  ItemsSource="{Binding SelectedItem.KrümmungDistributions, Mode=OneWay}">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel Orientation="Horizontal"/>
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<StackPanel Orientation="Vertical">
+										<Controls:NumericUpDown Value="{Binding Percent, Mode=TwoWay}" Grid.Row="0" Width="160" Height="30" Style="{StaticResource NumericUpDownForPercentage}" ToolTip="Anteil % für diese Klasse"/>
+										<Controls:NumericUpDown Value="{Binding Absolute, Mode=TwoWay}" Grid.Row="1" BorderThickness="2" Style="{StaticResource NumericUpDownCellStyle}" Height="30" Minimum="0" Interval="1" StringFormat=" {0:N0} Stck." ToolTip="Anteil N (absolute Anzahl) für diese Klasse">
+											<Controls:NumericUpDown.BorderBrush>
+												<MultiBinding Converter="{StaticResource DistributionToBrushConverter}" ConverterParameter="{StaticResource TrueValue}">
+													<Binding Path="DataContext.SelectedItem.Entity" ElementName="GeneratorUserControl" Mode="OneWay"/>
+													<Binding Path="Entity" Mode="OneWay"/>
+												</MultiBinding>
+											</Controls:NumericUpDown.BorderBrush>
+										</Controls:NumericUpDown>
+									</StackPanel>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+
+						<Grid Grid.Column="2" Grid.RowSpan="5" Width="150" HorizontalAlignment="Left">
+							<Grid.RowDefinitions>
+								<RowDefinition Height="30" SharedSizeGroup="Row0"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row1"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row2"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row3"/>
+							</Grid.RowDefinitions>
+							<TextBlock Text="&#931;" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FocusManager.IsFocusScope="False"/>
+							<Controls:NumericUpDown  Grid.Row="2" Value="{Binding SelectedItem.KrümungPercentSum, Mode=OneWay}" Style="{StaticResource NumericUpDownForPercentage}" FontWeight="Bold" IsReadOnly="True" Maximum="1000000" HideUpDownButtons="True"  FocusManager.IsFocusScope="False"/>
+							<Controls:NumericUpDown  Grid.Row="3" Value="{Binding SelectedItem.KrümmungAbsoluteSum, Mode=OneWay}" Style="{StaticResource NumericUpDownCellStyle}" BorderThickness="2" FontWeight="Bold" StringFormat=" {0:N0} Stck." IsReadOnly="True" HideUpDownButtons="True" FocusManager.IsFocusScope="False">
+								<Controls:NumericUpDown.BorderBrush>
+									<MultiBinding Converter="{StaticResource DistributionToBrushConverter}" ConverterParameter="{StaticResource TrueValue}">
+										<Binding Path="SelectedItem.Entity" Mode="OneWay"/>
+										<Binding Path="SelectedItem.SelectedAbholzigkeit.Entity" Mode="OneWay"/>
+									</MultiBinding>
+								</Controls:NumericUpDown.BorderBrush>
+							</Controls:NumericUpDown>
+						</Grid>
+					</Grid>
+				</GroupBox>
+
+				<GroupBox Header="Ovalitätsklassen" x:Name="OvalitätGroup" ToolTip="Definition von der Ovalitätsklassen">
+					<Grid Margin="5">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="160"/>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="160"/>
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="30" SharedSizeGroup="Row0"/>
+							<RowDefinition Height="30" SharedSizeGroup="Row1"/>
+							<RowDefinition Height="30" SharedSizeGroup="Row2"/>
+							<RowDefinition Height="30" SharedSizeGroup="Row3"/>
+						</Grid.RowDefinitions>
+
+						<Grid Grid.RowSpan="5">
+							<Grid.RowDefinitions>
+								<RowDefinition Height="30" SharedSizeGroup="Row0"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row1"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row2"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row3"/>
+							</Grid.RowDefinitions>
+							<Grid.Resources>
+								<Style x:Key="TableRowHeaderTextBlock" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+									<Setter Property="HorizontalAlignment" Value="Left"/>
+									<Setter Property="VerticalAlignment" Value="Top"/>
+									<Setter Property="Margin" Value="5,5,10,5"/>
+									<Setter Property="FontWeight" Value="Bold"/>
+								</Style>
+							</Grid.Resources>
+							<TextBlock Grid.Row="0" Text="Klasse" Style="{DynamicResource TableRowHeaderTextBlock}"/>
+							<TextBlock Grid.Row="1" Text="von/bis" Style="{DynamicResource TableRowHeaderTextBlock}"/>
+							<TextBlock Grid.Row="2" Text="Anteil %" Style="{DynamicResource TableRowHeaderTextBlock}"/>
+							<TextBlock Grid.Row="3" Text="Anteil N" ToolTip="Anteil N (absolute Anzahl)" Style="{DynamicResource TableRowHeaderTextBlock}"/>
+						</Grid>
+
+						<ItemsControl Grid.Column="1" Grid.RowSpan="2"  ItemsSource="{Binding SelectedItem.OvalitätView, Mode=OneWay}" IsTabStop="False">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel Orientation="Horizontal"/>
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Grid>
+										<Grid.RowDefinitions>
+											<RowDefinition Height="30" SharedSizeGroup="Row0"/>
+											<RowDefinition Height="30" SharedSizeGroup="Row1"/>
+										</Grid.RowDefinitions>
+										<Border Grid.Row="0" BorderThickness="2" Height="30" CornerRadius="3" ToolTip="Klasse" FocusManager.IsFocusScope="False">
+											<TextBlock Text="{Binding RangeId}" ToolTip="Klasse" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FocusManager.IsFocusScope="False"/>
+											<Border.BorderBrush>
+												<MultiBinding Converter="{StaticResource DistributionToBrushConverter}">
+													<Binding Path="DataContext.SelectedItem.Entity" ElementName="GeneratorUserControl" Mode="OneWay"/>
+													<Binding Path="DataContext.SelectedItem.SelectedKrümmung.Entity" ElementName="GeneratorUserControl" Mode="OneWay"/>
+												</MultiBinding>
+											</Border.BorderBrush>
+										</Border>
+										<StackPanel Grid.Row="1" Orientation="Horizontal">
+											<Controls:NumericUpDown Value="{Binding MinValue, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Style="{StaticResource IntervalNumericUpDownDecimalStyle}" Controls:TextBoxHelper.Watermark="von" ToolTip="Ovalität min."/>
+											<Controls:NumericUpDown Value="{Binding MaxValue, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Style="{StaticResource IntervalNumericUpDownDecimalStyle}" Controls:TextBoxHelper.Watermark="bis" ToolTip="Ovalität max."/>
+										</StackPanel>
+									</Grid>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+
+
+
+						<ItemsControl Grid.Column="1" Grid.Row="2" Grid.RowSpan="2"  ItemsSource="{Binding SelectedItem.OvalitätDistributions, Mode=OneWay}">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel Orientation="Horizontal"/>
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<StackPanel Orientation="Vertical">
+										<Controls:NumericUpDown Value="{Binding Percent, Mode=TwoWay}" Grid.Row="0" Width="160" Height="30" Style="{StaticResource NumericUpDownForPercentage}" ToolTip="Anteil % für diese Klasse"/>
+										<Controls:NumericUpDown Value="{Binding Absolute, Mode=TwoWay}" Grid.Row="1" Style="{StaticResource NumericUpDownCellStyle}" Height="30" Minimum="0" Interval="1" StringFormat=" {0:N0} Stck." ToolTip="Anteil N (absolute Anzahl) für diese Klasse"/>
+									</StackPanel>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+
+						<Grid Grid.Column="2" Grid.RowSpan="5" Width="150" HorizontalAlignment="Left">
+							<Grid.RowDefinitions>
+								<RowDefinition Height="30" SharedSizeGroup="Row0"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row1"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row2"/>
+								<RowDefinition Height="30" SharedSizeGroup="Row3"/>
+							</Grid.RowDefinitions>
+							<TextBlock Text="&#931;" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FocusManager.IsFocusScope="False"/>
+							<Controls:NumericUpDown  Grid.Row="2" Value="{Binding SelectedItem.OvalitätPercentSum, Mode=OneWay}" Style="{StaticResource NumericUpDownForPercentage}" FontWeight="Bold" IsReadOnly="True" Maximum="1000000" HideUpDownButtons="True"  FocusManager.IsFocusScope="False"/>
+							<Controls:NumericUpDown  Grid.Row="3" Value="{Binding SelectedItem.OvalitätAbsoluteSum, Mode=OneWay}" Style="{StaticResource NumericUpDownCellStyle}" BorderThickness="2" FontWeight="Bold" StringFormat=" {0:N0} Stck." IsReadOnly="True" HideUpDownButtons="True" FocusManager.IsFocusScope="False">
+								<Controls:NumericUpDown.BorderBrush>
+									<MultiBinding Converter="{StaticResource DistributionToBrushConverter}" ConverterParameter="{StaticResource TrueValue}">
+										<Binding Path="SelectedItem.Entity" Mode="OneWay"/>
+										<Binding Path="SelectedItem.SelectedKrümmung.Entity" Mode="OneWay"/>
+									</MultiBinding>
+								</Controls:NumericUpDown.BorderBrush>
+							</Controls:NumericUpDown>
+						</Grid>
+					</Grid>
+				</GroupBox>
+
+				<GroupBox Header="Wurzelanlauf/Stammfuß" x:Name="StammfußGroup" ToolTip="Definition von der Stammfüße">
+					<Grid Margin="5,15">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="125"/>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width=".7*"/>
+							<ColumnDefinition Width=".3*"/>
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="10"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+
+						<TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource RightTextBlock}" FontWeight="Bold" ToolTip="Anteil (in %) von Stämme, die mit einem Stammfuß ausgestattet werden sollen">Anteil %</TextBlock>
+						<TextBox Grid.Row="0" Grid.Column="1" IsReadOnly="True" BorderThickness="0" Text="{Binding SelectedItem.StammfußAnteil, Mode=OneWay, StringFormat={}{0}%}"/> 
+
+						<Grid Grid.Row="0" Grid.Column="2">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="Auto"/>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="Auto"/>
+							</Grid.ColumnDefinitions>
+							<TextBlock Grid.Column="0" Text="0%" FontStyle="Italic" FontSize="12" Margin="20,5,10,5" HorizontalAlignment="Right"/>
+							<Slider Grid.Column="1" HorizontalAlignment="Stretch" IsSnapToTickEnabled="False" Minimum="0" Maximum="100" TickFrequency="10" TickPlacement="TopLeft"
+										Margin="0" Value="{Binding SelectedItem.StammfußAnteil, Mode=TwoWay, UpdateSourceTrigger=Default}" ToolTip="{Binding SelectedItem.StammfußAnteil, Mode=OneWay}"/>
+							<TextBlock Grid.Column="2" Text="100%" FontStyle="Italic" FontSize="12" Margin="10,5,20,5" HorizontalAlignment="Left"/>
+						</Grid>
+
+						<TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RightTextBlock}" FontWeight="Bold"
+								   ToolTip="Stammfußhöhe in Zentimetern. Ein Schieber, der auf 30 bis 60 cm eingestellt wird, erzeugt per Zufall für jeden Stamm eine Stammfußhöhe in dem Bereich." >Höhen (cm)</TextBlock>
+						<TextBox Grid.Row="2" Grid.Column="1" IsReadOnly="True" BorderThickness="0">
+							<TextBox.Text>
+								<MultiBinding StringFormat="{}{0} bis {1} cm">
+									<Binding Path="SelectedItem.StammfußMinHeight"/>
+									<Binding Path="SelectedItem.StammfußMaxHeight"/>
+								</MultiBinding>
+							</TextBox.Text>
+						</TextBox>
+						<Controls:RangeSlider x:Name="RangeSlider" Grid.Row="2" Grid.Column="2" Margin="20,0" ToolTip="Stammfußhöhenintervall in Zentimetern"
+									AutoToolTipPlacement="TopLeft"
+									AutoToolTipPrecision="0"
+									ExtendedMode="True"
+									IsMoveToPointEnabled="True"
+									IsSnapToTickEnabled="False"
+									LowerValue="{Binding SelectedItem.StammfußMinHeight, Mode=TwoWay, UpdateSourceTrigger=Default}"
+									UpperValue="{Binding SelectedItem.StammfußMaxHeight, Mode=TwoWay, UpdateSourceTrigger=Default}"
+									Maximum="200"
+									MinRange="0"
+									MinRangeWidth="0"
+									Minimum="0"
+									MoveWholeRange="False"
+									Orientation="Horizontal"
+									SmallChange="1"
+									TickFrequency="10"
+									TickPlacement="BottomRight"
+									/>
+
+					</Grid>
+					
+				</GroupBox>
+				
+				<TextBlock Margin="5,25,0,10" Style="{StaticResource LeftTextBlock}">Bemerkungen</TextBlock>
+				<TextBox Margin="5" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Controls:TextBoxHelper.Watermark="Zusätzlichen Informationen"
+							 TextWrapping="Wrap" Height="200" AcceptsReturn="True" Text="{Binding SelectedItem.Bemerkungen, Mode=TwoWay, UpdateSourceTrigger=Default}" />
+
+				
+			</StackPanel>
+		</controls:EntityContentControl.DetailsPanel>
+
+		<!--<controls:EntityContentControl.SummaryPanel>
+			<StackPanel Orientation="Vertical">
+				<TextBlock Text="Zusammenfassung" Style="{StaticResource SummaryTitle}"/>
+
+
+				<Grid Background="Transparent" Margin="20"  HorizontalAlignment="Stretch">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="125"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+
+					<TextBlock Grid.Row="0" Grid.Column="0">Gesamtabschüsse</TextBlock>
+					<TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding NumberActiveEntities, Mode=OneWay, NotifyOnTargetUpdated=True}"/>
+
+					<TextBlock Grid.Row="1" Grid.Column="0" Margin="0,5,0,0" Text="Top Jäger"/>
+					<ListBox Grid.Row="2" Grid.ColumnSpan="2" Margin="0,10,0,0"
+										x:Name="TopJaeger" 
+										DockPanel.Dock="Left"
+										ScrollViewer.VerticalScrollBarVisibility="Auto"
+										ScrollViewer.HorizontalScrollBarVisibility="Auto"
+										HorizontalContentAlignment="Stretch"
+										Height="Auto"
+										BorderThickness="2,1,2,2"
+										BorderBrush="{DynamicResource AccentColorBrush}"
+										VerticalAlignment="Top" 
+										ItemsSource="{Binding TopJaeger}">
+
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<WrapPanel>
+									<TextBlock Text="{Binding Jaeger.Vorname}" />
+									<TextBlock Text=" " />
+									<TextBlock Text="{Binding Jaeger.Nachname}" FontWeight="Bold" />
+									<TextBlock Text=" (" />
+									<TextBlock Text="{Binding Count}" />
+									<TextBlock Text=")" />
+								</WrapPanel>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+
+					</ListBox>
+				</Grid>
+			</StackPanel>
+		</controls:EntityContentControl.SummaryPanel>-->
+
+
+	</controls:EntityContentControl>
+
+</UserControl>

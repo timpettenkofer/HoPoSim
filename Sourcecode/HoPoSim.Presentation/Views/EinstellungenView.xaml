@@ -1,0 +1,328 @@
+﻿<UserControl x:Class="HoPoSim.Presentation.Views.EinstellungenView"
+			  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:prism="http://prismlibrary.com/"
+			 xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+			 xmlns:converters="clr-namespace:HoPoSim.Presentation.Converters"
+			 xmlns:controls="clr-namespace:HoPoSim.Presentation.Controls"
+			 xmlns:behaviors="clr-namespace:HoPoSim.Presentation.Behaviors"
+			 xmlns:p = "clr-namespace:HoPoSim.Presentation.Properties"
+			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactivity"
+			 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+			 mc:Ignorable="d"
+			 d:DesignHeight="600" d:DesignWidth="1200"
+			 prism:ViewModelLocator.AutoWireViewModel="True">
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/HoPoSim.Presentation;component/Styles/Generic.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+			<converters:Int32ToNullableDoubleConverter x:Key="Int32ToNullableDoubleConverter"/>
+			<converters:SingleToNullableDoubleConverter x:Key="SingleToNullableDoubleConverter"/>
+			
+			<sys:String x:Key="DatabankPfad_ToolTip" xml:space="preserve">Bei einer Netzwerkinstallation geben Sie hier bitte den Pfad, unter die HoPoSim Datenbank zu finden ist.
+Ändern Sie diese Option nur, wenn Sie genau wissen, was Sie tun.</sys:String>
+			<sys:String x:Key="DokumentenPfad_ToolTip" xml:space="preserve">Geben Sie hier bitte den Pfad, unter die HoPoSim Dokumente zu kopieren sind.
+Ändern Sie diese Option nur, wenn Sie genau wissen, was Sie tun.</sys:String>
+			<sys:String x:Key="Simulator3DExePfad_ToolTip" xml:space="preserve">Geben Sie hier bitte den Pfad der HoPoSim3D.exe Anwendungsdatei.</sys:String>
+			<sys:String x:Key="CheckForUpdate_ToolTip" xml:space="preserve"> Sie haben die Möglichkeit über den Button 'Jetzt auf Updates prüfen' zu prüfen, ob eine neue Version von der Anwendung verfügbar ist.</sys:String>
+			<sys:String x:Key="Export3dPfad_ToolTip"  xml:space="preserve">Geben Sie hier bitte den Pfad, unter die HoPoSim 3D Modelle zu exportieren sind.</sys:String>
+			<sys:String x:Key="ExportImgPfad_ToolTip"  xml:space="preserve">Geben Sie hier bitte den Pfad, unter die HoPoSim Abbildungen zu exportieren sind.</sys:String>
+			<sys:String x:Key="ExportImgSize_ToolTip" xml:space="preserve">Geben Sie hier bitte die Größe (Breite und Höhe in Pixels) der exportierten HoPoSim Abbildungen.</sys:String>
+			<sys:String x:Key="ShowBaumartInformationMessages_ToolTip" xml:space="preserve">Infofenster mit Baumart-Parametrisierungsdetails nach Auswahl einer Baumart anzeigen.</sys:String>
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+
+	<DockPanel>
+		<Border DockPanel.Dock="Left" BorderThickness="2" Width="300" BorderBrush="{DynamicResource AccentColorBrush}" Padding="0,0,0,15" Margin="10,5,10,5">
+			<DockPanel LastChildFill="False">
+				<TextBlock DockPanel.Dock="Top" Text="Einstellungen" FontSize="21" Margin="10,0,10,10" />
+
+				<Button   DockPanel.Dock="Top" ToolTip="Datenbank-Einstellungen zeigen" Click="NavigateButton_Click" Tag="{Binding ElementName=Datenbank}" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="0">
+					<StackPanel Orientation="Horizontal">
+						<iconPacks:PackIconMaterial Width="22" Height="22" Kind="PlayCircleOutline" />
+						<TextBlock Text="Datenbank" FontSize="14" Margin="10,0,0,0" />
+					</StackPanel>
+				</Button>
+				<Button  DockPanel.Dock="Top" ToolTip="3D Simulator-Einstellungen zeigen" Click="NavigateButton_Click" Tag="{Binding ElementName=Simulator}" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="0">
+					<StackPanel Orientation="Horizontal">
+						<iconPacks:PackIconMaterial Width="22" Height="22" Kind="PlayCircleOutline" />
+						<TextBlock Text="3D Simulator" FontSize="14" Margin="10,0,0,0" />
+					</StackPanel>
+				</Button>
+
+				<Button  DockPanel.Dock="Top" ToolTip="Legenden-Einstellungen zeigen" Click="NavigateButton_Click" Tag="{Binding ElementName=Legenden}" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="0">
+					<StackPanel Orientation="Horizontal">
+						<iconPacks:PackIconMaterial Width="22" Height="22" Kind="PlayCircleOutline" />
+						<TextBlock Text="Legenden" FontSize="14" Margin="10,0,0,0" />
+					</StackPanel>
+				</Button>
+
+				<Button  DockPanel.Dock="Top" ToolTip="Export-Einstellungen zeigen" Click="NavigateButton_Click" Tag="{Binding ElementName=Export}" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="0">
+					<StackPanel Orientation="Horizontal">
+						<iconPacks:PackIconMaterial Width="22" Height="22" Kind="PlayCircleOutline" />
+						<TextBlock Text="Export" FontSize="14" Margin="10,0,0,0" />
+					</StackPanel>
+				</Button>
+
+				<Button  DockPanel.Dock="Top" ToolTip="Sonstiges-Einstellungen zeigen" Click="NavigateButton_Click" Tag="{Binding ElementName=Sonstiges}" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="0">
+					<StackPanel Orientation="Horizontal">
+						<iconPacks:PackIconMaterial Width="22" Height="22" Kind="PlayCircleOutline" />
+						<TextBlock Text="Sonstiges" FontSize="14" Margin="10,0,0,0" />
+					</StackPanel>
+				</Button>
+
+			</DockPanel>
+		</Border>
+		<StackPanel
+			DockPanel.Dock="Right"
+		HorizontalAlignment="Stretch" 
+		VerticalAlignment="Stretch" 
+		Margin="0,0,0,0"
+		Height="Auto">
+			
+
+
+			<Expander x:Name="Datenbank"  Header="Datenbank" Margin="0,5,0,5" IsExpanded="True">
+				<!--<GroupBox Header="Datenbank" Margin="0,20,0,0">-->
+				<Grid Background="Transparent" Margin="0,20,0,0">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width=".3*"/>
+						<ColumnDefinition Width=".6*"/>
+						<ColumnDefinition Width=".2*"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="*"/>
+						<RowDefinition Height="20"/>
+						<RowDefinition Height="*"/>
+						<RowDefinition Height="20"/>
+						<RowDefinition Height="*"/>
+						<RowDefinition Height="20"/>
+					</Grid.RowDefinitions>
+
+					<TextBlock Margin="0,0,10,0" Style="{StaticResource SettingPropertyText}" Grid.Row="0" Grid.Column="0" ToolTip="{StaticResource DatabankPfad_ToolTip}">Datenbankpfad</TextBlock>
+					<TextBox x:Name="DatabasePathTextBox" Grid.Row="0" Grid.Column="1" Height="29"
+						 ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}" Text="{Binding Path=DatabaseDirectory, UpdateSourceTrigger=Default}">
+
+						<Validation.ErrorTemplate>
+							<ControlTemplate>
+								<StackPanel>
+									<!-- Placeholder for the TextBox itself -->
+									<AdornedElementPlaceholder x:Name="textBox"/>
+									<TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red"/>
+								</StackPanel>
+							</ControlTemplate>
+						</Validation.ErrorTemplate>
+					</TextBox>
+					<Button x:Name="BrowseDatabaseFolderButton" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BrowseDatabaseFolderButton_Click" ToolTip="{StaticResource DatabankPfad_ToolTip}">Durchsuchen</Button>
+
+					<TextBlock Margin="0,0,10,0" Grid.Row="2" Grid.Column="0" Style="{StaticResource SettingPropertyText}" ToolTip="{StaticResource DokumentenPfad_ToolTip}">Dokumentenpfad</TextBlock>
+					<TextBox x:Name="DocumentsPathTextBox" Grid.Row="2" Grid.Column="1" Height="29" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}" Text="{Binding Path=DocumentsDirectory, UpdateSourceTrigger=Default}">
+
+						<Validation.ErrorTemplate>
+							<ControlTemplate>
+								<StackPanel>
+									<!-- Placeholder for the TextBox itself -->
+									<AdornedElementPlaceholder x:Name="textBox"/>
+									<TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red"/>
+								</StackPanel>
+							</ControlTemplate>
+						</Validation.ErrorTemplate>
+					</TextBox>
+					<Button x:Name="BrowseDocumentsFolderButton" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BrowseDocumentsFolderButton_Click" ToolTip="{StaticResource DokumentenPfad_ToolTip}">Durchsuchen</Button>
+
+			
+
+
+				</Grid>
+				<!--</GroupBox>-->
+			</Expander>
+
+
+			<Expander x:Name="Simulator"  Header="3D Simulator" Margin="0,5,0,5" IsExpanded="True">
+				<Grid Background="Transparent" Margin="0,20,0,0">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width=".3*"/>
+						<ColumnDefinition Width=".6*"/>
+						<ColumnDefinition Width=".2*"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="*"/>
+						<RowDefinition Height="20"/>
+						<RowDefinition Height="*"/>
+						<RowDefinition Height="20"/>
+						<RowDefinition Height="*"/>
+						<RowDefinition Height="20"/>
+					</Grid.RowDefinitions>
+
+
+					<TextBlock Margin="0,0,10,0" Grid.Row="0" Grid.Column="0" Style="{StaticResource SettingPropertyText}" ToolTip="{StaticResource Simulator3DExePfad_ToolTip}">Anwendungsdateipfad</TextBlock>
+					<TextBox x:Name="Simulator3DPathTextBox" Grid.Row="0" Grid.Column="1" Height="29" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}" Text="{Binding Path=Simulator3DFilePath, UpdateSourceTrigger=Default}"/>
+					<Button x:Name="BrowseImportFileButton" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BrowseSimulator3DFileButton_Click">Durchsuchen</Button>
+				</Grid>
+			</Expander>
+
+			<Expander x:Name="Legenden" Header="Legenden" Margin="0,5,0,5" IsExpanded="False">
+				<Expander.Resources>
+					<Style TargetType="DataGridCell" BasedOn="{StaticResource MetroDataGridCell}">
+						<Setter Property="ToolTip" Value="{Binding Column.SortMemberPath, RelativeSource={RelativeSource Self}}" />
+						<Setter Property="HorizontalContentAlignment" Value="Center" />
+					</Style>
+					<Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MetroDataGridColumnHeader}">
+						<Setter Property="ToolTip" Value="{Binding Column.SortMemberPath, RelativeSource={RelativeSource Self}}" />
+						<Setter Property="HorizontalContentAlignment" Value="Center" />
+					</Style>
+				</Expander.Resources>
+				<StackPanel Orientation="Vertical">
+
+					<GroupBox Header="Stapelqualität" Margin="10">
+						<DataGrid Margin="5" Style="{StaticResource MetroDataGrid}" AutoGenerateColumns="False" CanUserReorderColumns="False" CanUserSortColumns="False" HeadersVisibility="Column"
+								ItemsSource="{Binding Path=[Stapelqualitäten].ItemsView}" SelectionMode="Single" RowHeaderWidth="20" SelectionUnit="FullRow">
+							<DataGrid.Columns>
+								<DataGridTextColumn Binding="{Binding Path=[Level]}" IsReadOnly="True" Header="Stufe" SortMemberPath="Stufennummer, die für diese Stapelqualität verwendet wird"/>
+
+								<Controls:DataGridNumericUpDownColumn Binding="{Binding Path= [CrossTrunksProportion], Converter={StaticResource Int32ToNullableDoubleConverter},  Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+													Header="Anteil&#10;schräge&#10;Stämme" SortMemberPath="Anteil der schrägen Stämme im Gesamtpolter (in %)" Minimum="0" Maximum="100" Interval="1" StringFormat=" {0} %"/>
+
+								<Controls:DataGridNumericUpDownColumn Binding="{Binding Path=[CrossTrunksMinimumAngle], Converter={StaticResource Int32ToNullableDoubleConverter},Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+													Header="Minimaler&#10;Winkel" SortMemberPath="Minimaler Winkel eines schrägen Stammes&#x0a;(Muss kleiner oder gleich dem maximalen Winkel sein)" Minimum="0" Maximum="20" Interval="1" StringFormat=" {0} °"/>
+
+
+								<Controls:DataGridNumericUpDownColumn Binding="{Binding Path=[CrossTrunksMaximumAngle], Converter={StaticResource Int32ToNullableDoubleConverter},Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+													Header="Maximaler&#10;Winkel" SortMemberPath="Maximaler Winkel eines schrägen Stammes&#x0a;(Muss großer oder gleich dem minimalen Winkel sein)" Minimum="0" Maximum="20" Interval="1" StringFormat=" {0} °"/>
+
+								<DataGridTextColumn Binding="{Binding Path=[Bemerkungen], UpdateSourceTrigger=LostFocus}" IsReadOnly="False" Header="Bemerkungen">
+									<DataGridTextColumn.CellStyle>
+										<Style TargetType="DataGridCell" BasedOn="{StaticResource MetroDataGridCell}">
+											<Setter Property="HorizontalContentAlignment" Value="Left" />
+										</Style>
+									</DataGridTextColumn.CellStyle>
+								</DataGridTextColumn>
+
+							</DataGrid.Columns>
+						</DataGrid>
+					</GroupBox>
+
+					<GroupBox Header="Baumarten" Margin="10">
+						<DataGrid Margin="5" Style="{StaticResource MetroDataGrid}" AutoGenerateColumns="False" CanUserReorderColumns="False" CanUserSortColumns="False" HeadersVisibility="Column"
+								ItemsSource="{Binding Path=[Baumarten].ItemsView}" SelectionMode="Single" RowHeaderWidth="20" SelectionUnit="FullRow">
+							<DataGrid.Columns>
+								<DataGridTextColumn Binding="{Binding Path=[Name]}" IsReadOnly="True" Header="Name" SortMemberPath="Baumartname"/>
+
+								<DataGridCheckBoxColumn Binding="{Binding Path=[IncludeRoots], UpdateSourceTrigger=LostFocus}" Header="Wurzelanlauf" SortMemberPath="Gibt an, ob die Stämme dieser Baumart mit Wurzelanlauf versehen sein müssen"/>
+								<Controls:DataGridNumericUpDownColumn Binding="{Binding Path=[MinRootFlareNumber], Converter={StaticResource Int32ToNullableDoubleConverter},Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+													Header="Min&#10;Wurzelknoten" SortMemberPath="Mindestanzahl von Knoten zur Darstellung des Wurzelanlaufs" Minimum="0" Maximum="5" Interval="1"/>
+								<Controls:DataGridNumericUpDownColumn Binding="{Binding Path=[MaxRootFlareNumber], Converter={StaticResource Int32ToNullableDoubleConverter},Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+													Header="Max&#10;Wurzelknoten" SortMemberPath="Maximale Anzahl von Knoten zur Darstellung des Wurzelanlaufs" Minimum="0" Maximum="5" Interval="1"/>
+								<Controls:DataGridNumericUpDownColumn Binding="{Binding Path=[MinRootRadiusMultiplier], Converter={StaticResource SingleToNullableDoubleConverter}, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" StringFormat="#0.00"
+													Header="Min&#10;Wurzelknoten&#10;radius" SortMemberPath="Der minimale Radiusmultiplikator (bezogen auf den Stammdurchmesser) für den Wurzelanlauf" Minimum="0" Maximum="5" Interval="0.1"/>
+								<Controls:DataGridNumericUpDownColumn Binding="{Binding Path=[MaxRootRadiusMultiplier], Converter={StaticResource SingleToNullableDoubleConverter}, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" StringFormat="#0.00"
+													Header="Max&#10;Wurzelknoten&#10;radius" SortMemberPath="Der maximale Radiusmultiplikator (bezogen auf den Stammdurchmesser) für den Wurzelanlauf" Minimum="0" Maximum="5" Interval="0.1"/>
+
+
+								<DataGridCheckBoxColumn Binding="{Binding Path=[IncludeBranches], UpdateSourceTrigger=LostFocus}" Header="Aststummel" SortMemberPath="Gibt an, ob die Stämme dieser Baumart mit Aststummel versehen sein müssen"/>
+								<Controls:DataGridNumericUpDownColumn Binding="{Binding Path= [BranchStubTrunkProportion], Converter={StaticResource Int32ToNullableDoubleConverter},  Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+													Header="Anteil Stämme&#10;mit Aststummel" SortMemberPath="Anteil der Stämme mit Aststummel im Gesamtpolter (in %)" Minimum="0" Maximum="100" Interval="1" StringFormat=" {0} %"/>
+								<Controls:DataGridNumericUpDownColumn Binding="{Binding Path= [BranchStubMinLength], Converter={StaticResource Int32ToNullableDoubleConverter},  Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+													Header="Aststummel&#10;Min Länge" SortMemberPath="Die minimale Länge (in mm) eines Aststummels" Minimum="0" Maximum="1000" Interval="1" StringFormat=" {0} mm"/>
+								<Controls:DataGridNumericUpDownColumn Binding="{Binding Path= [BranchStubMaxLength], Converter={StaticResource Int32ToNullableDoubleConverter},  Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+													Header="Aststummel&#10;Max Länge" SortMemberPath="Die maximale Länge (in mm) eines Aststummels" Minimum="0" Maximum="1000" Interval="1" StringFormat=" {0} mm"/>
+								<Controls:DataGridNumericUpDownColumn Binding="{Binding Path= [BranchStubNumberPerMeter], Converter={StaticResource SingleToNullableDoubleConverter}, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" StringFormat="#0.00"
+													Header="Anzahl&#10;Aststummel&#10;per meter" SortMemberPath="Die durchschnittliche Anzahl von Aststummel pro Meter." Minimum="0" Maximum="20" Interval="0.1"/>
+								<Controls:DataGridNumericUpDownColumn Binding="{Binding Path=[BranchStubRadiusMultiplier], Converter={StaticResource SingleToNullableDoubleConverter},Mode=TwoWay, UpdateSourceTrigger=LostFocus}" StringFormat="#0.00"
+													Header="Aststummel&#10;Radius" SortMemberPath="Der Radiusmultiplikator (bezogen auf den Stammdurchmesser) für die Aststummel" Minimum="0" Maximum="5" Interval="0.1"/>
+								<Controls:DataGridNumericUpDownColumn Binding="{Binding Path= [BranchStubMinHeight], Converter={StaticResource SingleToNullableDoubleConverter}, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" StringFormat="#0.00"
+													Header="Aststummel&#10;Min Höhe" SortMemberPath="Die minimale Höhe (Faktor zwischen 0 und 1 in Bezug auf die Gesamtstammlänge) eines Aststummels am Stamm." Minimum="0" Maximum="1" Interval="0.05"/>
+								<Controls:DataGridNumericUpDownColumn Binding="{Binding Path= [BranchStubMaxHeight], Converter={StaticResource SingleToNullableDoubleConverter}, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" StringFormat="#0.00"
+													Header="Aststummel&#10;Max Höhe" SortMemberPath="Die maximale Höhe (Faktor zwischen 0 und 1 in Bezug auf die Gesamtstammlänge) eines Aststummels am Stamm." Minimum="0" Maximum="1" Interval="0.05"/>
+								<Controls:DataGridNumericUpDownColumn Binding="{Binding Path= [BranchStubAverageAngle], Converter={StaticResource SingleToNullableDoubleConverter}, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" StringFormat="#0.00"
+													Header="Aststummel&#10;Winkel" SortMemberPath="Der durchschnittliche Winkel (Faktor zwischen 0 und 1), den die Aststummel in Bezug auf den Stamm bilden." Minimum="0" Maximum="1" Interval="0.05"/>
+								
+
+							</DataGrid.Columns>
+						</DataGrid>
+					</GroupBox>
+
+				</StackPanel>
+			</Expander>
+			
+			
+			<Expander x:Name="Export"  Header="Export" Margin="0,5,0,5" IsExpanded="False">
+				<Grid Background="Transparent" Margin="0,20,0,0">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width=".3*"/>
+						<ColumnDefinition Width=".6*"/>
+						<ColumnDefinition Width=".2*"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="*"/>
+						<RowDefinition Height="20"/>
+						<RowDefinition Height="*"/>
+						<RowDefinition Height="20"/>
+						<RowDefinition Height="*"/>
+						<RowDefinition Height="20"/>
+					</Grid.RowDefinitions>
+
+
+					<TextBlock Margin="0,0,10,0" Grid.Row="0" Grid.Column="0" Style="{StaticResource SettingPropertyText}" ToolTip="{StaticResource Export3dPfad_ToolTip}">3D Modelle Exportverzeichnis</TextBlock>
+					<TextBox x:Name="Export3dPathTextBox" Grid.Row="0" Grid.Column="1" Height="29" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}" Text="{Binding Path=Export3dDirectoryPath, UpdateSourceTrigger=Default}"/>
+					<Button x:Name="BrowseExport3dDirectoryButton" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BrowseExport3dDirectoryButton_Click">Durchsuchen</Button>
+
+					<TextBlock Margin="0,0,10,0" Grid.Row="2" Grid.Column="0" Style="{StaticResource SettingPropertyText}" ToolTip="{StaticResource ExportImgPfad_ToolTip}">Abbildungen Exportverzeichnis</TextBlock>
+					<TextBox x:Name="ExportImgPathTextBox" Grid.Row="2" Grid.Column="1" Height="29" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}" Text="{Binding Path=ExportImgDirectoryPath, UpdateSourceTrigger=Default}"/>
+					<Button x:Name="BrowseExportImgDirectoryButton" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BrowseExportImgDirectoryButton_Click">Durchsuchen</Button>
+
+					<TextBlock Margin="0,0,10,0" Grid.Row="4" Grid.Column="0" Style="{StaticResource SettingPropertyText}" ToolTip="{StaticResource ExportImgSize_ToolTip}">Abbildungengröße</TextBlock>
+					<Grid Grid.Row="4" Grid.Column="1">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="70"/>
+							<ColumnDefinition/>
+							<ColumnDefinition Width="50"/>
+							<ColumnDefinition/>
+						</Grid.ColumnDefinitions>
+						<TextBlock Text="Breite" Style="{StaticResource SettingPropertyText}" HorizontalAlignment="Right"/>
+						<Controls:NumericUpDown Grid.Column="1" Style="{StaticResource NumericUpDownForPositveCount}" Margin="0,0,0,20" Minimum="100" Interval="1" Value="{Binding ExportImgWidth, Mode=TwoWay, UpdateSourceTrigger=Default}"/>
+						<TextBlock Text="Höhe" Grid.Column="2" Style="{StaticResource SettingPropertyText}" HorizontalAlignment="Right"/>
+						<Controls:NumericUpDown Grid.Column="3" Style="{StaticResource NumericUpDownForPositveCount}" Margin="0,0,0,20" Minimum="100" Interval="1" Value="{Binding ExportImgHeight, Mode=TwoWay, UpdateSourceTrigger=Default}"/>
+					</Grid>
+					<!--<TextBlock Margin="0,0,10,0" Grid.Row="2" Grid.Column="0" Style="{StaticResource SettingPropertyText}" ToolTip="{StaticResource LieferscheinMailTo_ToolTip}">Lieferschein Empfänger Email</TextBlock>
+					<TextBox x:Name="LieferscheinMailTo" Grid.Row="2" Grid.Column="1" Height="29" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}" Text="{Binding Path=LieferscheinMailTo, UpdateSourceTrigger=Default}">
+					</TextBox>-->
+
+				</Grid>
+				<!--</GroupBox>-->
+			</Expander>
+
+			<Expander x:Name="Sonstiges" Header="Sonstiges" Margin="0,5,0,5" IsExpanded="True">
+				<Grid Background="Transparent" Margin="0,20,0,0">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width=".6*"/>
+						<ColumnDefinition Width=".4*"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="*"/>
+						<RowDefinition Height="20"/>
+					</Grid.RowDefinitions>
+
+					<TextBlock Margin="0,5,10,0" Grid.Row="0" Grid.Column="0" Style="{StaticResource SettingPropertyText}" ToolTip="{StaticResource ShowBaumartInformationMessages_ToolTip}">Baumart-Parametrisierungsdetails Infofenster anzeigen</TextBlock>
+					<CheckBox x:Name="ShowBaumartInformationMessagesCheckBox" Margin="10,0,10,0" Grid.Row="0" Grid.Column="1" Height="29" ToolTip="{StaticResource ShowBaumartInformationMessages_ToolTip}" IsChecked="{Binding ShowBaumartInformationMessages, Mode=TwoWay, UpdateSourceTrigger=Default}"/>
+				</Grid>
+			</Expander>
+
+			<Expander Header="Software-Upgrade" Margin="0,5,0,5" IsExpanded="True">
+			<StackPanel Orientation="Vertical">
+				<Button x:Name="CheckForUpdateButton" Command="{Binding CheckForUpdatesCommand}" Margin="20" HorizontalAlignment="Center" VerticalAlignment="Top" ToolTip="{StaticResource CheckForUpdate_ToolTip}">
+					<Button.Content>
+						<TextBlock TextWrapping="Wrap">Jetzt auf Updates prüfen</TextBlock>
+					</Button.Content>
+				</Button>
+			</StackPanel>
+		</Expander>
+		</StackPanel>
+	</DockPanel>
+</UserControl>

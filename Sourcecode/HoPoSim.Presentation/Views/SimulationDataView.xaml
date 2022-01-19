@@ -1,0 +1,315 @@
+﻿<UserControl x:Class="HoPoSim.Presentation.Views.SimulationDataView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:domain="clr-namespace:HoPoSim.Data.Domain;assembly=HoPoSim.Data"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:controls="clr-namespace:HoPoSim.Presentation.Controls"
+             xmlns:viewModels="clr-namespace:HoPoSim.Presentation.ViewModels"
+             xmlns:converters="clr-namespace:HoPoSim.Presentation.Converters"
+			 xmlns:extensions="clr-namespace:HoPoSim.Presentation.Extensions"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             x:Name="HochstaendeUserControl"
+             prism:ViewModelLocator.AutoWireViewModel="True">
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/HoPoSim.Presentation;component/Styles/Generic.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+			<converters:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter"/>
+			<converters:NegateBooleanToVisibilityConverter x:Key="NegateBooleanToVisibilityConverter"/>
+			<converters:CombineVisibilityConverter x:Key="CombineVisibilityConverter"/>
+			<BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+
+			<MultiBinding x:Key="StammdatenVisibilityBinding" Converter="{StaticResource CombineVisibilityConverter}">
+				<Binding Path="SelectedItem.Stammdaten" Converter="{StaticResource ObjectToVisibilityConverter}"/>
+				<Binding Path="IsBusy" Converter="{StaticResource NegateBooleanToVisibilityConverter}"/>
+			</MultiBinding>
+
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+	<controls:EntityContentControl EntityName="Eingaben" x:Name="entityContentControl" HideActiveFilter="True" HideDecoration="False">
+		<controls:EntityContentControl.BrowserCommandPanel>
+			<StackPanel Orientation="Vertical">
+				<controls:EntityCommandControl Command="{Binding AddCommand}" CommandTriggered="EntityCommandControl_CommandTriggered" Text="Neue Daten erfassen" Tooltip="Neue Daten erfassen" IconMaterialKind="PlusCircleOutline"/>
+				<controls:EntityCommandControl Command="{Binding LoadCommand}" Text="Stammdaten importieren" Tooltip="Neue Parametersatz aus Exceldatei laden" IconMaterialKind="Import"/>
+				<controls:EntityCommandControl Command="{Binding OpenCommand}" Text="Eingabedatei öffnen" Tooltip="Importierte Eingabedatei für die aktuelle Parametersatz öffnen" IconMaterialKind="ChartHistogram"/>
+				<controls:EntityCommandControl Command="{Binding SimulationCommand}" Text="Simulation konfigurieren" Tooltip="Simulation mit der aktuellen Parametersatz vorbereiten" IconMaterialKind="Printer3d"/>
+				<controls:EntityCommandControl Command="{Binding DeleteCommand}" Text="Daten löschen" Tooltip="Ausgewählte Daten löschen" IconMaterialKind="MinusCircleOutline"/>
+
+				<!--<controls:EntityCommandControl Command="{Binding RestoreCommand}" Text="Datengrundlage wiederherstellen" Tooltip="Ausgewählte Datengrundlage wiederherstellen" IconMaterialKind="BackupRestore"/>-->
+				<!--<controls:EntityCommandControl Command="{Binding ExportExcelCommand}" Text="Als Exceldatei exportieren" Tooltip="Ausgefilterte Datengrundlage als Exceldatei exportieren" IconMaterialKind="Export"/>-->
+			</StackPanel>
+		</controls:EntityContentControl.BrowserCommandPanel>
+
+		<controls:EntityContentControl.BrowserControl>
+            <controls:ListBoxEntityBrowser>
+                <controls:ListBoxEntityBrowser.BrowserItemTemplate>
+                    <DataTemplate>
+                        <WrapPanel>
+                            <TextBlock Text="{Binding Name}" />
+                        </WrapPanel>
+                    </DataTemplate>
+                </controls:ListBoxEntityBrowser.BrowserItemTemplate>
+            </controls:ListBoxEntityBrowser>
+        </controls:EntityContentControl.BrowserControl>
+
+		<controls:EntityContentControl.DetailsPanel>
+			<StackPanel Orientation="Vertical">
+				<Grid Background="Transparent" Margin="20"  HorizontalAlignment="Stretch">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="175"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="150"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+
+					<TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource LeftTextBlock}">Name</TextBlock>
+					<TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Text="{Binding SelectedItem.Name, Mode=TwoWay, UpdateSourceTrigger=Default}" x:Name="nameTextBox"/>
+
+					<TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource LeftTextBlock}">Zusätzlichen Informationen</TextBlock>
+					<TextBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" 
+                             Controls:TextBoxHelper.Watermark="z.B. Baumart, Durchforstungsgrad, Alter..." TextWrapping="Wrap" Height="75" AcceptsReturn="True" Text="{Binding SelectedItem.Bemerkungen, Mode=TwoWay, UpdateSourceTrigger=Default}" />
+
+					<Expander Grid.Row="4" Grid.ColumnSpan="4" Header="Polterung" x:Name="PoltermaßeGroup" IsExpanded="True" ToolTip="Definition der Poltermaße (gleichmäßige Polterung in Trapezform gemäß RVR)" Margin="0,10">
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="150"/>
+								<ColumnDefinition Width="150" MinWidth="125"/>
+								<ColumnDefinition Width="120" MinWidth="120"/>
+								<ColumnDefinition Width="*" MinWidth="125"/>
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="10"/>
+								<RowDefinition Height="Auto"/>
+								<RowDefinition Height="Auto"/>
+								<RowDefinition Height="Auto"/>
+								<RowDefinition Height="Auto"/>
+								<RowDefinition Height="Auto"/>
+								<RowDefinition Height="Auto"/>
+							</Grid.RowDefinitions>
+							<TextBlock Grid.Row="1" Grid.Column="0" x:Name="LängeTextBlock" Style="{StaticResource RightTextBlock}" ToolTip="Länge der Polterung in Trapezform gemäß RVR" >Länge (Mindestmaß)</TextBlock>
+							<Controls:NumericUpDown Style="{StaticResource NumericUpDownForLength}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Width="125" Margin="0,0,0,20" 
+											Value="{Binding SelectedItem.Polterlänge, Mode=TwoWay, UpdateSourceTrigger=Default}" ToolTip="{Binding Source={x:Reference LängeTextBlock}, Path=ToolTip}"/>
+
+							<TextBlock Grid.Row="2" Grid.Column="0" x:Name="SteigungswinkelTextBlock" Style="{StaticResource RightTextBlock}" ToolTip="Steigungswinkel für unvollständigen Polterteil B (RVR)">Steigungswinkel</TextBlock>
+							<Controls:NumericUpDown Style="{StaticResource NumericUpDownForAngle}" Minimum="10" Maximum="80"
+								Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Width="125" Margin="0,0,0,20" 
+											Value="{Binding SelectedItem.Steigungswinkel, Mode=TwoWay, UpdateSourceTrigger=Default}" ToolTip="{Binding Source={x:Reference SteigungswinkelTextBlock}, Path=ToolTip}"/>
+
+							<TextBlock Grid.Row="1" Grid.Column="2" x:Name="BreiteTextBlock" Style="{StaticResource RightTextBlock}" ToolTip="Tiefe der Polterung (entspricht die Stammlänge)">Tiefe</TextBlock>
+							<Controls:NumericUpDown Style="{StaticResource NumericUpDownForLength}" HideUpDownButtons="True" IsReadOnly="False"
+								Grid.Row="1" Grid.Column="3" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Width="125" Margin="0,0,0,20" 
+											Value="{Binding SelectedItem.Tiefe, Mode=TwoWay}" ToolTip="{Binding Source={x:Reference BreiteTextBlock}, Path=ToolTip}"/>
+
+							<TextBlock Grid.Row="2" Grid.Column="2" x:Name="PolterunterlageTextBlock" Style="{StaticResource RightTextBlock}" ToolTip="Polterunterlage (je 2 Stämme parallel über die gesamte Polterlänge)">Polterunterlage</TextBlock>
+							<CheckBox Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Width="125" Margin="0,0,0,20" 
+											IsChecked="{Binding SelectedItem.Polterunterlage, Mode=TwoWay}" ToolTip="{Binding Source={x:Reference PolterunterlageTextBlock}, Path=ToolTip}"/>
+
+							<TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource RightTextBlock}" ToolTip="Factor für Kehrseite (Stirn/Zopf) spiegeln">Stirn/Zopf Spiegelung</TextBlock>
+							<Controls:NumericUpDown Style="{StaticResource NumericUpDownForPercentage}" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Width="125" Margin="0,0,0,20" 
+											Value="{Binding SelectedItem.Seitenspiegelung, Mode=TwoWay, UpdateSourceTrigger=Default}"
+													IsEnabled="{Binding SelectedItem.Zufallsspiegelung, Converter={StaticResource InvertBoolConverter}}"/>
+
+							<TextBlock Grid.Row="3" Grid.Column="2" x:Name="AutoSpiegelungTextBlock" Style="{StaticResource RightTextBlock}" ToolTip="Stirn/Zopf Zufallsspiegelung">Zufallsspiegelung</TextBlock>
+							<CheckBox Grid.Row="3" Grid.Column="3" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Width="125" Margin="0,0,0,20" 
+											IsChecked="{Binding SelectedItem.Zufallsspiegelung, Mode=TwoWay}" ToolTip="{Binding Source={x:Reference AutoSpiegelungTextBlock}, Path=ToolTip}"/>
+
+							<TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource RightTextBlock}" ToolTip="Schrägheit der Polterung. Anteil (in %) und Min/Max Winkel von Stämme, die nicht ganz parallel im Polter liegen.">Stapelqualität</TextBlock>
+							<Slider Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="1" HorizontalAlignment="Stretch" IsSnapToTickEnabled="True" Minimum="0" Maximum="4" TickFrequency="1" TickPlacement="TopLeft" 
+										Margin="10,0" Value="{Binding SelectedItem.StapelqualitätStufe, Mode=TwoWay, UpdateSourceTrigger=Default}" ToolTip="{Binding SelectedItem.StapelqualitätDescription}"/>
+						</Grid>
+					
+					</Expander>
+
+					<Expander Grid.Row="5" Grid.ColumnSpan="4" Header="Holz" x:Name="HolzGroup" IsExpanded="True" ToolTip="Definition von Holzeigenschaften" Margin="0,10">
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="150"/>
+								<ColumnDefinition Width="150" MinWidth="125"/>
+								<ColumnDefinition Width="120" MinWidth="120"/>
+								<ColumnDefinition Width="*" MinWidth="125"/>
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="10"/>
+								<RowDefinition Height="Auto"/>
+								<RowDefinition Height="Auto"/>
+								<RowDefinition Height="Auto"/>
+								<RowDefinition Height="Auto"/>
+								<RowDefinition Height="Auto"/>
+							</Grid.RowDefinitions>
+
+							<TextBlock Grid.Row="1" Grid.Column="0" x:Name="BaumartTextBlock" Style="{StaticResource RightTextBlock}" ToolTip="Baumart Auswahl">Baumart</TextBlock>
+							<ComboBox Grid.Row="1" Grid.Column="1" x:Name="BaumartComboBox" Margin="0,0,0,20" HorizontalAlignment="Center" Width="145" 
+									ItemsSource="{Binding Baumarten}" SelectedValue="{Binding SelectedItem.Baumart}" IsTextSearchEnabled="True" IsEditable="False" DisplayMemberPath="Name"/>
+
+							<TextBlock Grid.Row="2" Grid.Column="0" x:Name="WoodDensityTextBlock" Style="{StaticResource RightTextBlock}" ToolTip="Holzdichte in kg / m3">Holzdichte</TextBlock>
+							<Controls:NumericUpDown Style="{StaticResource NumericUpDownForDensity}"
+								Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Width="145" Margin="0,0,0,20" 
+											Value="{Binding SelectedItem.WoodDensity, Mode=TwoWay}" ToolTip="{Binding Source={x:Reference WoodDensityTextBlock}, Path=ToolTip}"/>
+
+
+							<TextBlock Grid.Row="2" Grid.Column="2" x:Name="WoodFrictionTextBlock" Style="{StaticResource RightTextBlock}" ToolTip="Reibungskoeffizient: ein Werte von 0 bis 1. Ein Wert von 0 beschreibt eine glatte Oberfläche, ein Wert von 1 eine sehr raue Fläche.">Holzfriktion</TextBlock>
+							<Controls:NumericUpDown  Style="{StaticResource NumericUpDownForFriction}"
+								Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Width="125" Margin="0,0,0,20" 
+											Value="{Binding SelectedItem.WoodFriction, Mode=TwoWay}" ToolTip="{Binding Source={x:Reference WoodFrictionTextBlock}, Path=ToolTip}"/>
+
+							<TextBlock Grid.Row="3" Grid.Column="0" x:Name="RindenbeschädigungenTextBlock" Style="{StaticResource RightTextBlock}" ToolTip="Reduktion der Rindenstärke in Prozent." >Rindenbeschädigungen</TextBlock>
+							<Controls:NumericUpDown Grid.Row="3" Grid.Column="1" Style="{StaticResource NumericUpDownForPercentage}" Minimum="0" Maximum="100" ToolTip="Reduktion der Rindenstärke in Prozent." StringFormat=" {0} %"
+								 HorizontalAlignment="Left" HorizontalContentAlignment="Left" Width="125" Margin="0,0,0,20" Value="{Binding SelectedItem.Rindenbeschädigungen, Mode=TwoWay, UpdateSourceTrigger=Default}"/>
+							
+							<Grid Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="Auto"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="Auto"/>
+								</Grid.ColumnDefinitions>
+								<TextBlock Grid.Column="0" Text="0%" FontStyle="Italic" FontSize="12" Margin="20,5,10,5" HorizontalAlignment="Right"/>
+								<Slider Grid.Column="1" HorizontalAlignment="Stretch" IsSnapToTickEnabled="False" Minimum="0" Maximum="100" TickFrequency="10" TickPlacement="TopLeft" 
+										Margin="0" Value="{Binding SelectedItem.Rindenbeschädigungen, Mode=TwoWay, UpdateSourceTrigger=Default}" ToolTip="{Binding SelectedItem.Rindenbeschädigungen}"/>
+								<TextBlock Grid.Column="2" Text="100%" FontStyle="Italic" FontSize="12" Margin="10,5,20,5" HorizontalAlignment="Left"/>
+							</Grid>
+
+							<TextBlock Grid.Row="4" Grid.Column="0" x:Name="KrümmungsvariantenTextBlock" Style="{StaticResource RightTextBlock}" ToolTip="Anteil der bananenförmigen Stämme (Anteil in Prozent) ." >Krümmungsvarianten</TextBlock>
+							<Controls:NumericUpDown Grid.Row="4" Grid.Column="1" Style="{StaticResource NumericUpDownForPercentage}" Minimum="0" Maximum="100" ToolTip="Anteil der bananenförmigen Stämme (Anteil in Prozent)." StringFormat=" {0} %"
+								 HorizontalAlignment="Left" HorizontalContentAlignment="Left" Width="125" Margin="0,0,0,20" Value="{Binding SelectedItem.Krümmungsvarianten, Mode=TwoWay, UpdateSourceTrigger=Default}"/>
+
+							<Grid Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="Auto"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="Auto"/>
+								</Grid.ColumnDefinitions>
+								<TextBlock Grid.Column="0" Text="0%" FontStyle="Italic" FontSize="12" Margin="20,5,10,5" HorizontalAlignment="Right"/>
+								<Slider Grid.Column="1" HorizontalAlignment="Stretch" IsSnapToTickEnabled="False" Minimum="0" Maximum="100" TickFrequency="10" TickPlacement="TopLeft" 
+										Margin="0" Value="{Binding SelectedItem.Krümmungsvarianten, Mode=TwoWay, UpdateSourceTrigger=Default}" ToolTip="{Binding SelectedItem.Krümmungsvarianten}"/>
+								<TextBlock Grid.Column="2" Text="100%" FontStyle="Italic" FontSize="12" Margin="10,5,20,5" HorizontalAlignment="Left"/>
+							</Grid>
+
+							<!--<StackPanel  Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal">
+								
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Text="0%" FontStyle="Italic" FontSize="12" Margin="5" />
+									<Slider   HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"  IsSnapToTickEnabled="True" Minimum="4" Maximum="7" TickFrequency="1" TickPlacement="Both" Value="{Binding SelectedItem.Quality, Mode=TwoWay, UpdateSourceTrigger=Default}" ToolTip="{Binding Source={x:Reference QualityTextBlock}, Path=ToolTip}"/>
+									<TextBlock Text="100%" FontStyle="Italic" FontSize="12" Margin="5,5,50,5"/>
+								</StackPanel>
+							</StackPanel>-->
+							
+						</Grid>
+					</Expander>
+					<!--<GroupBox Header="Stammliste" x:Name="StammProperties" HorizontalAlignment="Stretch">-->
+
+					<StackPanel Grid.Row="6" Grid.ColumnSpan="4"  Orientation="Vertical">
+						<Controls:ProgressRing Grid.Row="1" Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}" Margin="100"/>
+
+						<Expander Header="Stammliste" x:Name="StammlisteGroup" ToolTip="Einzelstammdaten-Tabelle" Visibility="{extensions:BindingResource StammdatenVisibilityBinding}" IsExpanded="True" Margin="0,10">
+							<StackPanel Orientation="Vertical">
+								<DataGrid x:Name="StammdatenDataGrid" MaxHeight="1000"
+								  Visibility="{Binding IsBusy, Converter={StaticResource NegateBooleanToVisibilityConverter}}"
+								  ItemsSource="{Binding SelectedItem.StammdatenView, Mode=OneWay}" SelectionMode="Extended" SelectionUnit="FullRow" GridLinesVisibility="All"
+                                                          AutoGenerateColumns="False" AutoGeneratingColumn="dataGrid_AutoGeneratingColumn"
+															CanUserReorderColumns="False" CanUserSortColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" 
+													BorderThickness="2" RowHeaderWidth="25" HeadersVisibility="Column"
+                                                          IsReadOnly="True">
+									<DataGrid.Resources>
+										<ResourceDictionary>
+											<Style TargetType="DataGridCell">
+												<Setter Property="TextBlock.TextAlignment" Value="Center" />
+											</Style>
+											<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+										
+										</ResourceDictionary>
+									</DataGrid.Resources>
+									<DataGrid.Columns>
+										<DataGridTextColumn Header="STAMM ID" Binding="{Binding STAMM_ID}" HeaderStyle="{StaticResource CustomMetroDataGridColumnHeader}"/>
+										<DataGridTextColumn Header="LÄNGE" Binding="{Binding LÄNGE}" HeaderStyle="{StaticResource CustomMetroDataGridColumnHeader}"/>
+										<DataGridTextColumn Header="D STIRN m.R." Binding="{Binding D_STIRN_mR}" HeaderStyle="{StaticResource CustomMetroDataGridColumnHeader}"/>
+										<DataGridTextColumn Header="D MITTE m.R." Binding="{Binding D_MITTE_mR}" HeaderStyle="{StaticResource CustomMetroDataGridColumnHeader}"/>
+										<DataGridTextColumn Header="D ZOPF m.R." Binding="{Binding D_ZOPF_mR}" HeaderStyle="{StaticResource CustomMetroDataGridColumnHeader}"/>
+										<DataGridTextColumn Header="D STIRN o.R." Binding="{Binding D_STIRN_oR}" HeaderStyle="{StaticResource CustomMetroDataGridColumnHeader}"/>
+										<DataGridTextColumn Header="D MITTE o.R." Binding="{Binding D_MITTE_oR}" HeaderStyle="{StaticResource CustomMetroDataGridColumnHeader}"/>
+										<DataGridTextColumn Header="D ZOPF o.R." Binding="{Binding D_ZOPF_oR}" HeaderStyle="{StaticResource CustomMetroDataGridColumnHeader}"/>
+										<DataGridTextColumn Header="ABHOLZIGKEIT" Binding="{Binding ABHOLZIGKEIT}" HeaderStyle="{StaticResource CustomMetroDataGridColumnHeader}"/>
+										<DataGridTextColumn Header="KRÜMMUNG" Binding="{Binding KRÜMMUNG}" HeaderStyle="{StaticResource CustomMetroDataGridColumnHeader}"/>
+										<DataGridTextColumn Header="OVALITÄT" Binding="{Binding OVALITÄT}" HeaderStyle="{StaticResource CustomMetroDataGridColumnHeader}"/>
+										<DataGridTextColumn Header="RINDENSTÄRKE" Binding="{Binding RINDENSTÄRKE}" HeaderStyle="{StaticResource CustomMetroDataGridColumnHeader}"/>
+										<DataGridTextColumn Header="STAMMFUßHÖHE" Binding="{Binding STAMMFUßHÖHE}" HeaderStyle="{StaticResource CustomMetroDataGridColumnHeader}"/>
+									</DataGrid.Columns>
+									
+										
+									</DataGrid>
+								<WrapPanel>
+									<TextBlock Grid.Row="6" Grid.Column="0" x:Name="DatenquelleTextBlock" Visibility="{extensions:BindingResource StammdatenVisibilityBinding}" Style="{StaticResource LeftTextBlock}">Datenquelle</TextBlock>
+									<TextBox Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" Visibility="{extensions:BindingResource StammdatenVisibilityBinding}" 
+							   Text="{Binding SelectedItem.SourceFile, Mode=OneWay, UpdateSourceTrigger=Default}" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Text}"
+							   HorizontalAlignment="Left" VerticalAlignment="Bottom" BorderThickness="0" IsReadOnly="True" IsEnabled="True"/>
+								</WrapPanel>
+							
+							</StackPanel>
+						</Expander>
+						
+						</StackPanel>
+
+					<!--<TextBlock Grid.Row="6" Grid.Column="0" x:Name="DatenquelleTextBlock" Visibility="{extensions:BindingResource StammdatenVisibilityBinding}" Style="{StaticResource LeftTextBlock}">Datenquelle</TextBlock>
+					<TextBlock Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" Visibility="{extensions:BindingResource StammdatenVisibilityBinding}" 
+							   Text="{Binding SelectedItem.SourceFile, Mode=OneWay, UpdateSourceTrigger=Default}" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Text}"
+							   HorizontalAlignment="Left" Style="{StaticResource LeftTextBlock}" IsEnabled="False"/>-->
+					
+				</Grid>
+				<!--</GroupBox>-->
+            </StackPanel>
+        </controls:EntityContentControl.DetailsPanel>
+
+        <controls:EntityContentControl.SummaryPanel>
+            <StackPanel Orientation="Vertical">
+                <!--<TextBlock Text="Zusammenfassung" Style="{StaticResource SummaryTitle}" />-->
+
+				<GroupBox Header="Übersicht" BorderBrush="{DynamicResource AccentColorBrush}">
+                <Grid Background="Transparent" Margin="20"  HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+										
+						<TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource SummaryEntry}">Stammanzahl</TextBlock>
+						<Controls:NumericUpDown Grid.Row="0" Grid.Column="1" Style="{StaticResource NumericUpDownForPositveCount}" StringFormat=" {0:N0} Stck." HorizontalAlignment="Left" HorizontalContentAlignment="Left" Width="125" Margin="0,0,0,20" 
+                                        Value="{Binding SelectedItem.Stammanzahl, Mode=OneWay, NotifyOnTargetUpdated=True}" IsReadOnly="True"
+												HideUpDownButtons="True"/>
+
+						<TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource SummaryEntry}">Tiefe</TextBlock>
+						<Controls:NumericUpDown Grid.Row="1" Grid.Column="1" Style="{StaticResource NumericUpDownForLength}"  HorizontalAlignment="Left" HorizontalContentAlignment="Left" Width="125" Margin="0,0,0,20" 
+                                        Value="{Binding SelectedItem.Tiefe, Mode=OneWay, NotifyOnTargetUpdated=True}" IsReadOnly="True"
+												HideUpDownButtons="True"/>
+					</Grid>
+				</GroupBox>
+			</StackPanel>
+        </controls:EntityContentControl.SummaryPanel>
+    </controls:EntityContentControl>
+
+</UserControl>

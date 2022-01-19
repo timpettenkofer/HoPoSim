@@ -1,0 +1,221 @@
+﻿<UserControl x:Class="HoPoSim.Presentation.Views.SimulationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"
+			 xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+			 xmlns:controls="clr-namespace:HoPoSim.Presentation.Controls"
+			 xmlns:behaviors="clr-namespace:HoPoSim.Presentation.Behaviors"
+			 xmlns:converters="clr-namespace:HoPoSim.Presentation.Converters"
+			 x:Name="SimulationUserControl"
+             prism:ViewModelLocator.AutoWireViewModel="True">
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/HoPoSim.Presentation;component/Styles/Generic.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+			<converters:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter"/>
+			<converters:NegateBooleanToVisibilityConverter x:Key="NegateBooleanToVisibilityConverter"/>
+			<converters:CombineVisibilityConverter x:Key="CombineVisibilityConverter"/>
+			<converters:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter"/>
+			<BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+	<controls:EntityContentControl EntityName="Simulationen" x:Name="entityContentControl" HideActiveFilter="True" HideDecoration="False">
+		<controls:EntityContentControl.BrowserCommandPanel>
+			<StackPanel Orientation="Vertical">
+				<controls:EntityCommandControl Command="{Binding StartCommand}" Text="Simulation starten" Tooltip="Simulation mit der aktuellen Parametersatz starten" IconMaterialKind="PlayCircleOutline"/>
+				<controls:EntityCommandControl Command="{Binding StopCommand}" Text="Simulation stoppen" Tooltip="Aktuelle Simulation abbrechen" IconMaterialKind="Cancel"/>
+				<controls:EntityCommandControl Command="{Binding ExportCommand}" Text="Ausgabe exportieren" Tooltip="Ausgewählte Simulationsausgabe exportieren" IconMaterialKind="Export"/>
+				<controls:EntityCommandControl Command="{Binding DeleteCommand}" Text="Simulation und Ausgabe löschen" Tooltip="Ausgewählte Simulation und deren Ergebnisse löschen" IconMaterialKind="MinusCircleOutline"/>
+			</StackPanel>
+		</controls:EntityContentControl.BrowserCommandPanel>
+
+		<controls:EntityContentControl.BrowserControl>
+			<controls:ListBoxEntityBrowser>
+				<controls:ListBoxEntityBrowser.BrowserItemTemplate>
+					<DataTemplate>
+						<WrapPanel>
+							<TextBlock Text="{Binding Name}" />
+						</WrapPanel>
+					</DataTemplate>
+				</controls:ListBoxEntityBrowser.BrowserItemTemplate>
+			</controls:ListBoxEntityBrowser>
+		</controls:EntityContentControl.BrowserControl>
+
+		<controls:EntityContentControl.DetailsPanel>
+			<StackPanel Orientation="Vertical">
+				<Grid Background="Transparent" Margin="20"  HorizontalAlignment="Stretch">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="150"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="5"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="5"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="15"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+
+					<StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="4">
+						<TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource LeftTextBlock}">Name</TextBlock>
+						<TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" Margin="30,0,40,20" Width="250" Text="{Binding SelectedItem.Name, Mode=TwoWay, UpdateSourceTrigger=Default}" x:Name="nameTextBox"/>
+						<Button Grid.Row="0" Grid.Column="2" Click="ShowData_Click" Margin="20,0" Width="125" VerticalAlignment="Top" HorizontalAlignment="Left" 
+								Content="Polterungsdaten" Controls:ButtonHelper.PreserveTextCase="True"/>
+					</StackPanel>
+
+					<StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="4">
+						<TextBlock x:Name="IterationTextBlock" Style="{StaticResource LeftTextBlock}" ToolTip="Anzahl der Iterationen" >Iterationen</TextBlock>
+						<Controls:NumericUpDown Style="{StaticResource NumericUpDownStyle}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Width="125" Margin="0,0,40,20" 
+												Value="{Binding SelectedItem.Iterationanzahl, Mode=TwoWay, UpdateSourceTrigger=Default}" ToolTip="{Binding Source={x:Reference IterationTextBlock}, Path=ToolTip}"/>
+
+						
+
+						<TextBlock x:Name="TimeOutTextBlock" Style="{StaticResource LeftTextBlock}" ToolTip="Time-out-Periode (in Sekunden), nach der die Iteration abgebrochen werden sollte." >Time-out</TextBlock>
+						<Controls:NumericUpDown Style="{StaticResource NumericUpDownForPeriod}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Width="100" Margin="0,0,40,20" 
+												Value="{Binding SelectedItem.TimeOutPeriod, Mode=TwoWay, UpdateSourceTrigger=Default}" ToolTip="{Binding Source={x:Reference TimeOutTextBlock}, Path=ToolTip}"/>
+
+					</StackPanel>
+
+					<StackPanel  Grid.Row="4" Grid.ColumnSpan="4" Orientation="Horizontal">
+						<TextBlock x:Name="QualityTextBlock" Style="{StaticResource LeftTextBlock}" ToolTip="Genauigkeit der Sektionsraummaß, Polygonzug- und Hohlräume Berechnungen. Hohe Genauigkeiten bedeuten längere Rechenzeiten." >Genauigkeit der Berechnungen</TextBlock>
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="Hoch" FontStyle="Italic" FontSize="12" Margin="5" />
+							<Slider  HorizontalAlignment="Left" HorizontalContentAlignment="Left" Width="125" IsSnapToTickEnabled="True" Minimum="4" Maximum="7" TickFrequency="1" TickPlacement="Both"
+							Value="{Binding SelectedItem.Quality, Mode=TwoWay, UpdateSourceTrigger=Default}" ToolTip="{Binding Source={x:Reference QualityTextBlock}, Path=ToolTip}"/>
+							<TextBlock Text="Niedrig" FontStyle="Italic" FontSize="12" Margin="5,5,50,5"/>
+						</StackPanel>
+						<TextBlock x:Name="FotooptikQualityTextBlock" Style="{StaticResource LeftTextBlock}" ToolTip="Durchschnittliche Anzahl von Stützpunkte per Laufmeter für die Berechnung der Fotooptische Hülle. Ein Wert von Null ergibt eine konvexe Hülle." >Fotooptische Genauigkeit</TextBlock>
+						<Controls:NumericUpDown Style="{StaticResource NumericUpDownStyle}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Width="125" Margin="0,0,40,20" 
+												Value="{Binding SelectedItem.FotooptikQuality, Mode=TwoWay, UpdateSourceTrigger=Default}" Minimum="0" Maximum="1000" ToolTip="{Binding Source={x:Reference FotooptikQualityTextBlock}, Path=ToolTip}"/>
+					</StackPanel>
+
+					<TextBlock Grid.Row="6" Grid.Column="0" Style="{StaticResource LeftTextBlock}">Zusätzlichen Informationen</TextBlock>
+					<TextBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" 
+								Controls:TextBoxHelper.Watermark="Bemerkungen" TextWrapping="Wrap" Height="60"
+								AcceptsReturn="True" Text="{Binding SelectedItem.Bemerkungen, Mode=TwoWay, UpdateSourceTrigger=Default}"/>
+
+							<StackPanel Grid.Row="8"  Grid.ColumnSpan="4">
+								<FrameworkElement x:Name="dataContextElement" Visibility="Collapsed"/>
+								<ListView x:Name="ResultsListView" ItemsSource="{Binding SelectedItem.Results, Mode=OneWay}" SelectedItem="{Binding SelectedItem.SelectedResults, UpdateSourceTrigger=PropertyChanged}">
+									<ListView.Resources>
+										<ContextMenu x:Key="ItemContextMenu">
+											<MenuItem x:Name="Visualize" Command="{Binding DataContext.VisualizeCommand, Source={x:Reference dataContextElement}}" IsVisibleChanged="MenuItem_IsVisibleChanged" Header="Visualisieren"/>
+											<MenuItem Header="Exportieren">
+												<MenuItem x:Name="ExportImages" Header="Als Bild (png)" Command="{Binding DataContext.ExportImagesCommand, Source={x:Reference dataContextElement}}" CommandParameter="png" IsVisibleChanged="MenuItem_IsVisibleChanged"/>
+												<MenuItem x:Name="Export3dObj" Header="Als 3D-Modell (obj)" Command="{Binding DataContext.Export3dCommand, Source={x:Reference dataContextElement}}" CommandParameter="obj" IsVisibleChanged="MenuItem_IsVisibleChanged"/>
+												<MenuItem x:Name="Export3dFbx" Header="Als 3D-Modell (fbx)" Command="{Binding DataContext.Export3dCommand, Source={x:Reference dataContextElement}}" CommandParameter="fbx" IsVisibleChanged="MenuItem_IsVisibleChanged"/>
+											</MenuItem>
+										</ContextMenu>
+									</ListView.Resources>
+									<ListView.ItemContainerStyle>
+										<Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource MetroListViewItem}">
+											<Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}"/>
+											<Setter Property="HorizontalContentAlignment" Value="Center"/>
+											<Setter Property="HorizontalAlignment" Value="Center"/>
+									
+								</Style>
+									</ListView.ItemContainerStyle>
+									<ListView.View>
+										<GridView>
+											<GridViewColumn Header="#" DisplayMemberBinding="{Binding IterationId}" ToolTipService.ToolTip ="Iteration Id"/>
+											<GridViewColumn Header="Status" DisplayMemberBinding="{Binding IterationStatus, Converter={StaticResource EnumToDescriptionConverter}}" ToolTipService.ToolTip ="Iteration Ergebnis"/>
+
+									<GridViewColumn Header="Höhe&#x0a;  (m)" DisplayMemberBinding="{Binding Höhe}" ToolTipService.ToolTip ="Höhe des Polters"/>
+									<GridViewColumn Header="Breite&#x0a;   (m)" DisplayMemberBinding="{Binding Breite}" ToolTipService.ToolTip ="Breite des Polters"/>
+
+									<GridViewColumn Header="Stirnfläche&#x0a;     V (qm)" DisplayMemberBinding="{Binding StirnflächeV}" ToolTipService.ToolTip ="Polterfläche Vorderseite in Quadratmeter m. R. (Summe der Stammstirnflächen)"/>
+									<GridViewColumn Header="Stirnfläche&#x0a;     H (qm)" DisplayMemberBinding="{Binding StirnflächeH}" ToolTipService.ToolTip ="Polterfläche Hinterseite in Quadratmeter m. R. (Summe der Stammstirnflächen)"/>
+								
+									<GridViewColumn Header="Fotooptik&#x0a;    V (qm)" DisplayMemberBinding="{Binding FotooptikV}" ToolTipService.ToolTip ="Fotooptik Vorderseite in Quadratmeter m. R."/>
+									<GridViewColumn Header="Fotooptik&#x0a;    H (qm)" DisplayMemberBinding="{Binding FotooptikH}" ToolTipService.ToolTip ="Fotooptik Hinterseite in Quadratmeter m. R."/>
+									<GridViewColumn Header="Fotooptik&#x0a;     (Rm)" DisplayMemberBinding="{Binding Fotooptik}" ToolTipService.ToolTip ="Poltervolume in Raummeter m. R. (errechnet mittels Fotooptik)"/>
+									<GridViewColumn Header="Stützpunkte&#x0a;          V" DisplayMemberBinding="{Binding FotooptikStützpunkteV}" ToolTipService.ToolTip ="Anzahl von Stützpunkten Vorderseite"/>
+									<GridViewColumn Header="Stützpunkte&#x0a;          H" DisplayMemberBinding="{Binding FotooptikStützpunkteH}" ToolTipService.ToolTip ="Anzahl von Stützpunkten Hinterseite"/>
+
+									<GridViewColumn Header="Polygonzug&#x0a;     V (qm)" DisplayMemberBinding="{Binding PolygonzugV}" ToolTipService.ToolTip ="Polterfläche Vorderseite in Quadratmeter m. R. (errechnet mittels Polygonzug)"/>
+									<GridViewColumn Header="Polygonzug&#x0a;     H (qm)" DisplayMemberBinding="{Binding PolygonzugH}" ToolTipService.ToolTip ="Polterfläche Hinterseite in Quadratmeter m. R. (errechnet mittels Polygonzug)"/>
+									<GridViewColumn Header="Polygonzug&#x0a;       (Rm)" DisplayMemberBinding="{Binding Polygonzug}" ToolTipService.ToolTip ="Poltervolume in Raummeter m. R. (errechnet mittels Polygonzug)"/>
+									
+									<GridViewColumn Header="Sektionsraummaß&#x0a;           V (qm)" DisplayMemberBinding="{Binding SektionV}" ToolTipService.ToolTip ="Polterfläche Vorderseite in Quadratmeter m. R. (errechnet mittels Sektionsraummaß)"/>
+									<GridViewColumn Header="Sektionsraummaß&#x0a;           H (qm)" DisplayMemberBinding="{Binding SektionH}" ToolTipService.ToolTip ="Polterfläche Hinterseite in Quadratmeter m. R. (errechnet mittels Sektionsraummaß)"/>
+									<GridViewColumn Header="Sektionsraummaß&#x0a;             (Rm)" DisplayMemberBinding="{Binding Sektion}" ToolTipService.ToolTip ="Poltervolume in Raummeter m. R. (errechnet mittels Sektionsraummaß)"/>
+
+									<GridViewColumn Header="Poltervolume&#x0a;     o.R   (Fm)"  DisplayMemberBinding="{Binding PoltervolumeOR}" ToolTipService.ToolTip ="Poltervolumen in Fm ohne Rinde, errechnet aus der Summe aller Einzelstammvolumen mit Rindenanteil"/>
+									<GridViewColumn Header="Poltervolume&#x0a;     m.R   (Fm)"  DisplayMemberBinding="{Binding PoltervolumeMR}" ToolTipService.ToolTip ="Poltervolumen in Fm mit Rinde errechnet aus der Summe aller Einzelstammvolumen ohne Rindenanteil"/>
+									
+									<GridViewColumn Header="Polterunterlage&#x0a;       o.R   (Fm)"  DisplayMemberBinding="{Binding PolterunterlagevolumeOR}" ToolTipService.ToolTip ="Polterunterlagevolumen in Fm ohne Rinde, errechnet aus der Summe der Polterunterlagestammvolumen mit Rindenanteil"/>
+									<GridViewColumn Header="Polterunterlage&#x0a;       m.R   (Fm)"  DisplayMemberBinding="{Binding PolterunterlagevolumeMR}" ToolTipService.ToolTip ="Polterunterlagevolumen in Fm mit Rinde errechnet aus der Summe der Polterunterlagestammvolumen ohne Rindenanteil"/>
+									<GridViewColumn Header="Rindenanteil&#x0a;         (%)"  DisplayMemberBinding="{Binding Rindenanteil}" ToolTipService.ToolTip ="Rindenanteil in % des Festgehalts/Raumvolumens mit Rinde" />
+
+									<GridViewColumn Header="UF Sektion.&#x0a;        o.R" DisplayMemberBinding="{Binding UFSektionOR}" ToolTipService.ToolTip ="Umrechnungsfaktor errechnet aus der Poltervolume in Fm o. R und der Poltervolume (errechnet mittels Sektionsraummaß) in Rm m. R."/>
+									<GridViewColumn Header="UF Sektion.&#x0a;        m.R" DisplayMemberBinding="{Binding UFSektionMR}" ToolTipService.ToolTip ="Umrechnungsfaktor errechnet aus der Poltervolume in Fm m. R und der Poltervolume (errechnet mittels Sektionsraummaß) in Rm m. R."/>
+
+									<GridViewColumn Header="UF Polygonzug&#x0a;            o.R" DisplayMemberBinding="{Binding UFPolygonzugOR}" ToolTipService.ToolTip ="Umrechnungsfaktor errechnet aus der Poltervolume in Fm o. R und der Poltervolume (errechnet mittels Polygonzug) in Rm m. R."/>
+									<GridViewColumn Header="UF Polygonzug&#x0a;            m.R" DisplayMemberBinding="{Binding UFPolygonzugMR}" ToolTipService.ToolTip ="Umrechnungsfaktor errechnet aus der Poltervolume in Fm m. R und der Poltervolume (errechnet mittels Polygonzug) in Rm m. R."/>
+
+									<GridViewColumn Header="UF Fotooptik&#x0a;           o.R" DisplayMemberBinding="{Binding UFFotooptikOR}" ToolTipService.ToolTip ="Umrechnungsfaktor errechnet aus der Poltervolume in Fm o. R und der Poltervolume (errechnet mittels Fotooptik) in Rm m. R."/>
+									<GridViewColumn Header="UF Fotooptik&#x0a;           m.R" DisplayMemberBinding="{Binding UFFotooptikMR}" ToolTipService.ToolTip ="Umrechnungsfaktor errechnet aus der Poltervolume in Fm m. R und der Poltervolume (errechnet mittels Fotooptik) in Rm m. R."/>
+
+								</GridView>
+									</ListView.View>
+								</ListView>
+							</StackPanel>
+				</Grid>
+			</StackPanel>
+		</controls:EntityContentControl.DetailsPanel>
+
+		<controls:EntityContentControl.SummaryPanel>
+			<StackPanel Orientation="Vertical">
+
+				<GroupBox Header="Übersicht" BorderBrush="{DynamicResource AccentColorBrush}">
+					<Grid Background="Transparent" Margin="20"  HorizontalAlignment="Stretch">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="120"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+
+
+						<TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource SummaryEntry}">Stammanzahl</TextBlock>
+						<Controls:NumericUpDown Grid.Row="0" Grid.Column="1" Style="{StaticResource NumericUpDownForPositveCount}" StringFormat=" {0:N0} Stck." HorizontalAlignment="Left" HorizontalContentAlignment="Left" Width="125" Margin="0,0,0,20" 
+                                        Value="{Binding SelectedItem.Stammanzahl, Mode=OneWay, NotifyOnTargetUpdated=True}" IsReadOnly="True"
+												HideUpDownButtons="True"/>
+
+					</Grid>
+				</GroupBox>
+			</StackPanel>
+		</controls:EntityContentControl.SummaryPanel>
+
+		<controls:EntityContentControl.OutputPanel>
+		
+				<TextBox x:Name="EmbeddedLogTextBox" Margin="0" behaviors:ScrollToEndBehavior.OnTextChanged="True"  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" 
+					 ToolTip="Meldungen (3D Simulator)" IsReadOnly="True" TextWrapping="Wrap"
+						 Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContentPresenter}, AncestorLevel=1}, Path=ActualHeight}" 
+						 Text="{Binding Messages, Mode=OneWay}" />
+						
+			
+		</controls:EntityContentControl.OutputPanel>
+	</controls:EntityContentControl>
+
+</UserControl>
+

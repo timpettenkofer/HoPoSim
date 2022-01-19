@@ -1,0 +1,109 @@
+﻿<UserControl x:Class="HoPoSim.Presentation.Views.HomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HoPoSim.Presentation.Views"
+			 xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+			 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<Style x:Key="LargeTileStyle" TargetType="Controls:Tile">
+				<Setter Property="Height" Value="125" />
+				<Setter Property="TextOptions.TextFormattingMode" Value="Display" />
+				<Setter Property="TextOptions.TextRenderingMode" Value="ClearType" />
+				<Setter Property="TitleFontSize" Value="14" />
+				<Setter Property="Width" Value="300" />
+			</Style>
+
+			<Style x:Key="SmallTileStyle" TargetType="Controls:Tile">
+				<Setter Property="Height" Value="125" />
+				<Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
+				<Setter Property="TextOptions.TextRenderingMode" Value="ClearType" />
+				<Setter Property="TitleFontSize" Value="10" />
+				<Setter Property="Width" Value="147" />
+			</Style>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	
+	<Grid>
+		<WrapPanel Grid.Row="1"
+                       Grid.Column="1"
+                       Width="940"
+                       Height="382"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center">
+			
+			<Controls:Tile Title="Generator" Click="Generator_Click"
+						   ToolTip="HoPoSim Generatorseite öffnen"
+                               Margin="3"
+                               Controls:ControlsHelper.MouseOverBorderBrush="{DynamicResource BlackBrush}"
+                               Background="Teal"
+                               HorizontalTitleAlignment="Right"
+                               Style="{StaticResource LargeTileStyle}">
+				<iconPacks:PackIconMaterial Width="40"
+                                                   Height="40"
+                                                   Kind="Beaker" />
+			</Controls:Tile>
+			<Controls:Tile Title="Eingabe" Click="Eingabe_Click"
+						   ToolTip="HoPoSim Eingabeseite öffnen"
+                               Margin="3"
+                               Controls:ControlsHelper.MouseOverBorderBrush="{DynamicResource BlackBrush}"
+                               Style="{StaticResource LargeTileStyle}">
+				<iconPacks:PackIconMaterial Width="40"
+                                                   Height="40"
+                                                   Kind="InboxArrowDown" />
+			</Controls:Tile>
+			<Controls:Tile Title="Simulation" Click="Simulation_Click"
+						   ToolTip="HoPoSim Simulationseite öffnen"
+                               Background="DimGray"
+                               Style="{StaticResource LargeTileStyle}">
+				<iconPacks:PackIconMaterial Width="40"
+                                              Height="40"
+                                              Kind="Printer3d" />
+			</Controls:Tile>
+			<!--<Controls:Tile Title="Ausgabe" Click="Ausgabe_Click"
+						   ToolTip="HoPoSim Ausgabeseite öffnen"
+                               Background="#D2691E"
+                               HorizontalTitleAlignment="Right"
+                               Style="{StaticResource LargeTileStyle}">
+				<iconPacks:PackIconMaterial Width="40"
+                                              Height="40"
+                                              Kind="InboxArrowUp" />
+			</Controls:Tile>-->
+
+			<Controls:Tile Title="Einstellungen" Click="Einstellungen_Click"
+						   ToolTip="HoPoSim Einstellungenseite öffnen"
+                               Background="Green"
+                               Style="{StaticResource LargeTileStyle}">
+				<iconPacks:PackIconMaterial Width="40"
+                                              Height="40"
+                                              Kind="Settings" />
+			</Controls:Tile>
+
+			<Controls:Tile Title="Eingabevorlage" Click="Vorlage_Click"
+						   ToolTip="Leere Eingabevorlage erstellen"
+						   Background="Teal"
+                               Style="{StaticResource LargeTileStyle}">
+				<iconPacks:PackIconModern Width="40" Height="40" Kind="PageExcel"/>
+				<!--<iconPacks:PackIconMaterial Width="40"
+                                                Height="40"
+                                                Kind="FileExcelBox" />-->
+			</Controls:Tile>
+			
+			<Controls:Tile Title="Hilfe" Click="Hilfe_Click"
+						   ToolTip="HoPoSim Hilfe öffnen"
+                               Background="#FF842D"
+                               Style="{StaticResource LargeTileStyle}">
+				<iconPacks:PackIconMaterial Width="40"
+                                                Height="40"
+                                                Kind="HelpCircleOutline" />
+			</Controls:Tile>
+
+			
+		</WrapPanel>
+	</Grid>
+</UserControl>
