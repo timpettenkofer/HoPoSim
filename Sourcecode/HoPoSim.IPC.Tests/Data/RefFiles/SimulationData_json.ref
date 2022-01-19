@@ -1,0 +1,80 @@
+{
+  "Id": 1,
+  "Name": "Test_Eingabe",
+  "Poltermaße": {
+    "MinimumPolterlänge": 3.0,
+    "Polterbreite": 6.0,
+    "Poltertiefe": null,
+    "Polterunterlage": false,
+    "Steigungswinkel": 46.0,
+    "Seitenspiegelung": 10.5,
+    "Zufallsspiegelung": false,
+    "ActualPolterlänge": 0.0,
+    "Polterunterlagehöhe": 0.0,
+    "Polterunterlagestammanzahl": 0,
+    "CrossTrunksProportion": 25,
+    "CrossTrunksMinimumAngle": 10,
+    "CrossTrunksMaximumAngle": 28
+  },
+  "Holz": {
+    "Rindenbeschädigungen": 10,
+    "Krümmungsvarianten": 60
+  },
+  "Baumart": {
+    "Name": "Buche",
+    "MinNoiseStrength": 3.2,
+    "MaxNoiseStrength": 5.1,
+    "MinNoiseSize": 1.1,
+    "MaxNoiseSize": 1.8,
+    "IncludeRoots": true,
+    "MinRootFlareNumber": 1,
+    "MaxRootFlareNumber": 4,
+    "MinRootRadiusMultiplier": 1.1,
+    "MaxRootRadiusMultiplier": 1.5,
+    "IncludeBranches": true,
+    "BranchStubTrunkProportion": 26,
+    "BranchStubMinLength": 5,
+    "BranchStubMaxLength": 33,
+    "BranchStubMinHeight": 0.23,
+    "BranchStubMaxHeight": 0.81,
+    "BranchStubAverageAngle": 0.9,
+    "BranchStubRadiusMultiplier": 0.61,
+    "BranchStubNumberPerMeter": 1.5
+  },
+  "Stämme": [
+    {
+      "StammId": "1",
+      "Länge": 6.0,
+      "D_Stirn_mR": 456,
+      "D_Mitte_mR": 400,
+      "D_Zopf_mR": 380,
+      "D_Stirn_oR": 450,
+      "D_Mitte_oR": 394,
+      "D_Zopf_oR": 374,
+      "Abholzigkeit": 12,
+      "Krümmung": 10,
+      "Rindenstärke": 6,
+      "Ovalität": 0.9,
+      "Stammfußhöhe": 0,
+      "HasBranchStubs": false
+    },
+    {
+      "StammId": "2",
+      "Länge": 6.0,
+      "D_Stirn_mR": 458,
+      "D_Mitte_mR": 402,
+      "D_Zopf_mR": 382,
+      "D_Stirn_oR": 452,
+      "D_Mitte_oR": 396,
+      "D_Zopf_oR": 376,
+      "Abholzigkeit": 10,
+      "Krümmung": 11,
+      "Rindenstärke": 5,
+      "Ovalität": 0.8,
+      "Stammfußhöhe": 32,
+      "HasBranchStubs": false
+    }
+  ],
+  "WoodDensity": 500.0,
+  "WoodFriction": 0.4
+}

@@ -1,0 +1,51 @@
+{
+  "RangeId": -1,
+  "Total": 100,
+  "Percent": 100.0,
+  "Absolute": 100,
+  "Children": [
+    {
+      "RangeId": 1,
+      "Total": 100,
+      "Percent": 100.0,
+      "Absolute": 100,
+      "Children": [
+        {
+          "RangeId": 1,
+          "Total": 100,
+          "Percent": 100.0,
+          "Absolute": 100,
+          "Children": [
+            {
+              "RangeId": 1,
+              "Total": 100,
+              "Percent": 50.0,
+              "Absolute": 50,
+              "Children": [],
+              "Id": 0
+            },
+            {
+              "RangeId": 2,
+              "Total": 100,
+              "Percent": 20.0,
+              "Absolute": 20,
+              "Children": [],
+              "Id": 0
+            },
+            {
+              "RangeId": 3,
+              "Total": 100,
+              "Percent": 30.0,
+              "Absolute": 30,
+              "Children": [],
+              "Id": 0
+            }
+          ],
+          "Id": 0
+        }
+      ],
+      "Id": 0
+    }
+  ],
+  "Id": 0
+}

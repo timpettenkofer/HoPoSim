@@ -1,0 +1,59 @@
+<NewDataSet>
+  <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:MainDataTable="Stammdaten" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="Stammdaten">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="Einzelstamm_x0020_ID" msdata:DataType="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" type="xs:anyType" minOccurs="0" />
+                <xs:element name="Länge_x0020__x0028_m_x0029_" msdata:DataType="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" type="xs:anyType" minOccurs="0" />
+                <xs:element name="D_x0020_Stirn_x0020_mit_x0020_Rinde_x0020__x0028_mm_x0029_" msdata:DataType="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" type="xs:anyType" minOccurs="0" />
+                <xs:element name="D_x0020_Mitte_x0020_mit_x0020_Rinde_x0020__x0028_mm_x0029_" msdata:DataType="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" type="xs:anyType" minOccurs="0" />
+                <xs:element name="D_x0020_Zopf_x0020_mit_x0020_Rinde_x0020__x0028_mm_x0029_" msdata:DataType="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" type="xs:anyType" minOccurs="0" />
+                <xs:element name="D_x0020_Stirn_x0020_ohne_x0020_Rinde_x0020__x0028_mm_x0029_" msdata:DataType="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" type="xs:anyType" minOccurs="0" />
+                <xs:element name="D_x0020_Mitte_x0020_ohne_x0020_Rinde_x0020__x0028_mm_x0029_" msdata:DataType="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" type="xs:anyType" minOccurs="0" />
+                <xs:element name="D_x0020_Zopf_x0020_ohne_x0020_Rinde_x0020__x0028_mm_x0029_" msdata:DataType="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" type="xs:anyType" minOccurs="0" />
+                <xs:element name="Abholzigkeit_x0020__x0028_mm_x002F_lfm_x0029_" msdata:DataType="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" type="xs:anyType" minOccurs="0" />
+                <xs:element name="Krümmung_x0020__x0028_mm_x002F_lfm_x0029_" msdata:DataType="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" type="xs:anyType" minOccurs="0" />
+                <xs:element name="Ovalität_x0020__x0028__x005D_0_x002C_1_x005D__x0029_" msdata:DataType="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" type="xs:anyType" minOccurs="0" />
+                <xs:element name="Rindenstärke_x0020__x0028_mm_x0029_" msdata:DataType="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" type="xs:anyType" minOccurs="0" />
+                <xs:element name="Stammfußhöhe_x0020__x0028_cm_x0029_" msdata:DataType="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" type="xs:anyType" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <Stammdaten>
+    <Einzelstamm_x0020_ID xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">1</Einzelstamm_x0020_ID>
+    <Länge_x0020__x0028_m_x0029_ xsi:type="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">3</Länge_x0020__x0028_m_x0029_>
+    <D_x0020_Stirn_x0020_mit_x0020_Rinde_x0020__x0028_mm_x0029_ xsi:type="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">32.5</D_x0020_Stirn_x0020_mit_x0020_Rinde_x0020__x0028_mm_x0029_>
+    <D_x0020_Mitte_x0020_mit_x0020_Rinde_x0020__x0028_mm_x0029_ xsi:type="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">38</D_x0020_Mitte_x0020_mit_x0020_Rinde_x0020__x0028_mm_x0029_>
+    <D_x0020_Zopf_x0020_mit_x0020_Rinde_x0020__x0028_mm_x0029_ xsi:type="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">42</D_x0020_Zopf_x0020_mit_x0020_Rinde_x0020__x0028_mm_x0029_>
+    <D_x0020_Stirn_x0020_ohne_x0020_Rinde_x0020__x0028_mm_x0029_ xsi:type="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">30</D_x0020_Stirn_x0020_ohne_x0020_Rinde_x0020__x0028_mm_x0029_>
+    <D_x0020_Mitte_x0020_ohne_x0020_Rinde_x0020__x0028_mm_x0029_ xsi:type="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">36</D_x0020_Mitte_x0020_ohne_x0020_Rinde_x0020__x0028_mm_x0029_>
+    <D_x0020_Zopf_x0020_ohne_x0020_Rinde_x0020__x0028_mm_x0029_ xsi:type="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">40</D_x0020_Zopf_x0020_ohne_x0020_Rinde_x0020__x0028_mm_x0029_>
+    <Abholzigkeit_x0020__x0028_mm_x002F_lfm_x0029_ xsi:type="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">1.2</Abholzigkeit_x0020__x0028_mm_x002F_lfm_x0029_>
+    <Krümmung_x0020__x0028_mm_x002F_lfm_x0029_ xsi:type="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">2.5</Krümmung_x0020__x0028_mm_x002F_lfm_x0029_>
+    <Ovalität_x0020__x0028__x005D_0_x002C_1_x005D__x0029_ xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">0.8</Ovalität_x0020__x0028__x005D_0_x002C_1_x005D__x0029_>
+    <Rindenstärke_x0020__x0028_mm_x0029_ xsi:type="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">20</Rindenstärke_x0020__x0028_mm_x0029_>
+    <Stammfußhöhe_x0020__x0028_cm_x0029_ xsi:type="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">0</Stammfußhöhe_x0020__x0028_cm_x0029_>
+  </Stammdaten>
+  <Stammdaten>
+    <Einzelstamm_x0020_ID xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">2</Einzelstamm_x0020_ID>
+    <Länge_x0020__x0028_m_x0029_ xsi:type="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">3</Länge_x0020__x0028_m_x0029_>
+    <D_x0020_Stirn_x0020_mit_x0020_Rinde_x0020__x0028_mm_x0029_ xsi:type="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">35.5</D_x0020_Stirn_x0020_mit_x0020_Rinde_x0020__x0028_mm_x0029_>
+    <D_x0020_Mitte_x0020_mit_x0020_Rinde_x0020__x0028_mm_x0029_ xsi:type="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">41</D_x0020_Mitte_x0020_mit_x0020_Rinde_x0020__x0028_mm_x0029_>
+    <D_x0020_Zopf_x0020_mit_x0020_Rinde_x0020__x0028_mm_x0029_ xsi:type="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">43</D_x0020_Zopf_x0020_mit_x0020_Rinde_x0020__x0028_mm_x0029_>
+    <D_x0020_Stirn_x0020_ohne_x0020_Rinde_x0020__x0028_mm_x0029_ xsi:type="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">33</D_x0020_Stirn_x0020_ohne_x0020_Rinde_x0020__x0028_mm_x0029_>
+    <D_x0020_Mitte_x0020_ohne_x0020_Rinde_x0020__x0028_mm_x0029_ xsi:type="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">39</D_x0020_Mitte_x0020_ohne_x0020_Rinde_x0020__x0028_mm_x0029_>
+    <D_x0020_Zopf_x0020_ohne_x0020_Rinde_x0020__x0028_mm_x0029_ xsi:type="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">43</D_x0020_Zopf_x0020_ohne_x0020_Rinde_x0020__x0028_mm_x0029_>
+    <Abholzigkeit_x0020__x0028_mm_x002F_lfm_x0029_ xsi:type="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">1.5</Abholzigkeit_x0020__x0028_mm_x002F_lfm_x0029_>
+    <Krümmung_x0020__x0028_mm_x002F_lfm_x0029_ xsi:type="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">2.8</Krümmung_x0020__x0028_mm_x002F_lfm_x0029_>
+    <Ovalität_x0020__x0028__x005D_0_x002C_1_x005D__x0029_ xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">0.9</Ovalität_x0020__x0028__x005D_0_x002C_1_x005D__x0029_>
+    <Rindenstärke_x0020__x0028_mm_x0029_ xsi:type="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">22</Rindenstärke_x0020__x0028_mm_x0029_>
+    <Stammfußhöhe_x0020__x0028_cm_x0029_ xsi:type="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">22</Stammfußhöhe_x0020__x0028_cm_x0029_>
+  </Stammdaten>
+</NewDataSet>

@@ -1,0 +1,53 @@
+<NewDataSet>
+  <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:MainDataTable="Data" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="Data">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="Einzelstamm_x0020_ID" type="xs:string" minOccurs="0" />
+                <xs:element name="L_x4BA7_e" type="xs:string" minOccurs="0" />
+                <xs:element name="D_x0020_Stirn_x0020_mit_x0020_Rinde" type="xs:string" minOccurs="0" />
+                <xs:element name="D_x0020_Mitte_x0020_mit_x0020_Rinde" type="xs:string" minOccurs="0" />
+                <xs:element name="D_x0020_Zopf_x0020_mit_x0020_Rinde" type="xs:string" minOccurs="0" />
+                <xs:element name="D_x0020_Stirn_x0020_ohne_x0020_Rinde" type="xs:string" minOccurs="0" />
+                <xs:element name="D_x0020_Mitte_x0020_ohne_x0020_Rinde" type="xs:string" minOccurs="0" />
+                <xs:element name="D_x0020_Zopf_x0020_ohne_x0020_Rinde" type="xs:string" minOccurs="0" />
+                <xs:element name="Abholzigkeit" type="xs:string" minOccurs="0" />
+                <xs:element name="Krümmung" type="xs:string" minOccurs="0" />
+                <xs:element name="Rindenst_x4CAB_e" type="xs:string" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <Data>
+    <Einzelstamm_x0020_ID>1</Einzelstamm_x0020_ID>
+    <L_x4BA7_e>3</L_x4BA7_e>
+    <D_x0020_Stirn_x0020_mit_x0020_Rinde>32,5</D_x0020_Stirn_x0020_mit_x0020_Rinde>
+    <D_x0020_Mitte_x0020_mit_x0020_Rinde>38,00</D_x0020_Mitte_x0020_mit_x0020_Rinde>
+    <D_x0020_Zopf_x0020_mit_x0020_Rinde>42,00</D_x0020_Zopf_x0020_mit_x0020_Rinde>
+    <D_x0020_Stirn_x0020_ohne_x0020_Rinde>30,00</D_x0020_Stirn_x0020_ohne_x0020_Rinde>
+    <D_x0020_Mitte_x0020_ohne_x0020_Rinde>36,00</D_x0020_Mitte_x0020_ohne_x0020_Rinde>
+    <D_x0020_Zopf_x0020_ohne_x0020_Rinde>40,00</D_x0020_Zopf_x0020_ohne_x0020_Rinde>
+    <Abholzigkeit>1,20</Abholzigkeit>
+    <Krümmung>2,50</Krümmung>
+    <Rindenst_x4CAB_e>20,00</Rindenst_x4CAB_e>
+  </Data>
+  <Data>
+    <Einzelstamm_x0020_ID>2</Einzelstamm_x0020_ID>
+    <L_x4BA7_e>3</L_x4BA7_e>
+    <D_x0020_Stirn_x0020_mit_x0020_Rinde>35,5</D_x0020_Stirn_x0020_mit_x0020_Rinde>
+    <D_x0020_Mitte_x0020_mit_x0020_Rinde>41,00</D_x0020_Mitte_x0020_mit_x0020_Rinde>
+    <D_x0020_Zopf_x0020_mit_x0020_Rinde>43,00</D_x0020_Zopf_x0020_mit_x0020_Rinde>
+    <D_x0020_Stirn_x0020_ohne_x0020_Rinde>33,00</D_x0020_Stirn_x0020_ohne_x0020_Rinde>
+    <D_x0020_Mitte_x0020_ohne_x0020_Rinde>39,00</D_x0020_Mitte_x0020_ohne_x0020_Rinde>
+    <D_x0020_Zopf_x0020_ohne_x0020_Rinde>43,00</D_x0020_Zopf_x0020_ohne_x0020_Rinde>
+    <Abholzigkeit>1,50</Abholzigkeit>
+    <Krümmung>2,80</Krümmung>
+    <Rindenst_x4CAB_e>22,00</Rindenst_x4CAB_e>
+  </Data>
+</NewDataSet>
