@@ -1,5 +1,5 @@
 
-HOW TO INSTALL:
+HOW TO INSTALL (for compiled program):
 
 - Execute the file „setup.exe“.
 - When prompted, grant rights to install software.
