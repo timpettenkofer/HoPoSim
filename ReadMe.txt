@@ -1,5 +1,10 @@
 
-HOW TO INSTALL (for compiled program):
+
+HoPoSim (HolzPolterSimulator) Software
+Software developer: Dr. Philippe Guigue (http://philippe-guigue.de)
+
+
+HOW TO INSTALL:
 
 - Execute the file „setup.exe“.
 - When prompted, grant rights to install software.
@@ -10,9 +15,17 @@ HOW TO INSTALL (for compiled program):
 
 LICENSE:
 
-The software was developed by Arbeitsgemeinschaft Rohholz e.V. as part of the research project HoBeOpt (HoBeOpt - Optimierung der Wald-Werk-Holzbereitstellungskette – durch Analyse, Bewertung und Weiterentwicklung von Rundholzmessverfahren und Logistikprozessen im Rohholzhandel). It was funded by the Federal Ministry of Food and Agriculture of Germany.
+The software was developed by Arbeitsgemeinschaft Rohholz e.V. as part of the research project HoBeOpt (HoBeOpt - Optimierung der Wald-Werk-Holzbereitstellungskette – durch Analyse, Bewertung und Weiterentwicklung von Rundholzmessverfahren und Logistikprozessen im Rohholzhandel). It was funded by the Federal Ministry of Food and Agriculture of Germany through the Fachagentur Nachwachsende Rohstoffe (FNR) under the grant number (Förderkennzeichen; FKZ) 22017916.
 
-The software may be used and developed for scientific purposes and personal use and must not be commercialised in any case.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish and distribute copies of the Software, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software. When using the Software for research, the following research paper is to be cited: 
+
+	De Miguel Diez, F., Guigue, P., Pettenkofer, T., Tolosana Esteban, E; Purfürst, 	T., Cremer, T.; 2022; Development and evaluation of a novel 3d simulation 		software for modelling wood stacks; PLOS one (under review)
 
 
 DISCLAIMER OF WARRANTY:
